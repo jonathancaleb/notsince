@@ -1,0 +1,131 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Privacy policy — notsince</title>
+<meta name="description" content="notsince collects nothing, sends nothing, and stores nothing outside your device.">
+<meta name="robots" content="index, follow">
+<link rel="stylesheet" href="policy.css">
+</head>
+<body>
+<main class="policy" data-app="notsince">
+
+  <header class="policy__head">
+    <div class="policy__mark" aria-hidden="true">ns</div>
+    <div>
+      <p class="policy__app">notsince</p>
+      <h1 class="policy__title">Privacy policy</h1>
+      <p class="policy__meta">
+        Last updated <time datetime="2026-09-04">4 September 2026</time>
+        &middot; Package <code>app.notsince</code>
+      </p>
+    </div>
+  </header>
+
+  <p class="policy__lede">
+    notsince collects nothing, sends nothing, and stores nothing outside your
+    device. There is no account to create and no server to talk to.
+  </p>
+
+  <section class="policy__section">
+    <h2>What the app stores</h2>
+    <p>
+      Everything you enter — the habits you track, their start times, milestones
+      and history, your alarms, and your notes and tasks — is written to a
+      database file inside the app's own private storage on your phone. Android
+      prevents other apps from reading it.
+    </p>
+  </section>
+
+  <section class="policy__section">
+    <h2>What the app sends</h2>
+    <p>
+      Nothing. notsince makes no network requests. It contains no advertising,
+      no crash reporting, no usage analytics and no third-party tracking
+      libraries. Fonts and alarm sounds ship inside the app rather than being
+      downloaded.
+    </p>
+    <p class="policy__note">
+      This is a property of how the app is built, not a promise about how we
+      behave: there is no code in notsince that opens a network connection.
+    </p>
+  </section>
+
+  <section class="policy__section">
+    <h2>Permissions, and why each one is needed</h2>
+    <dl class="policy__perms">
+      <dt>Notifications</dt>
+      <dd>
+        An alarm rings from a foreground service, which Android will not run
+        without permission to post its notification. The same permission carries
+        milestone and overdue-task reminders.
+      </dd>
+
+      <dt>Alarms &amp; reminders <span class="policy__perm-id">SCHEDULE_EXACT_ALARM</span></dt>
+      <dd>
+        So an alarm rings at the time you set, rather than whenever the system
+        next decides to wake the app.
+      </dd>
+
+      <dt>Full-screen notifications <span class="policy__perm-id">USE_FULL_SCREEN_INTENT</span></dt>
+      <dd>
+        So a ringing alarm shows its screen over the lock screen instead of
+        becoming a notification you have to find.
+      </dd>
+
+      <dt>Vibrate, wake lock, run at startup</dt>
+      <dd>
+        So an alarm can vibrate, wake the screen, and survive the phone being
+        restarted.
+      </dd>
+    </dl>
+    <p>
+      None of these permissions are used to collect information about you.
+      notsince does not request access to your files, contacts, camera,
+      microphone or location.
+    </p>
+  </section>
+
+  <section class="policy__section">
+    <h2>Children</h2>
+    <p>
+      notsince is not directed at children and collects no personal information
+      from anyone, of any age.
+    </p>
+  </section>
+
+  <section class="policy__section">
+    <h2>Deleting your data</h2>
+    <p>
+      Settings contains <strong>Remove all data</strong>, which erases
+      everything the app has stored. Uninstalling notsince also removes it.
+      Because nothing is ever sent anywhere, there is nothing else to delete and
+      nothing to request a copy of.
+    </p>
+  </section>
+
+  <section class="policy__section">
+    <h2>Changes to this policy</h2>
+    <p>
+      If this policy changes, the date at the top changes with it. The current
+      version always ships inside the app, readable offline, under
+      Settings &rsaquo; Privacy policy.
+    </p>
+  </section>
+
+  <section class="policy__section policy__section--contact">
+    <h2>Contact</h2>
+    <p>
+      Questions, bugs or anything else:
+      <a href="mailto:sabilacalebj@gmail.com">sabilacalebj@gmail.com</a>
+    </p>
+  </section>
+
+  <footer class="policy__foot">
+    <p>notsince &middot; <code>app.notsince</code> &middot; Caleb Sabila</p>
+  </footer>
+
+</main>
+</body>
+</html>

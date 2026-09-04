@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Adaptive icon: the launcher masks this to whatever shape the device uses,
+     so the glyph sits inside the 66/108dp safe zone and the tile itself is a
+     flat colour rather than the outlined sticker. The legacy square PNG keeps
+     the outline for pre-Oreo launchers. -->
+<adaptive-icon xmlns:android="http://schemas.android.com/apk/res/android">
+    <background android:drawable="@color/ns_tint" />
+    <foreground android:drawable="@mipmap/ic_launcher_foreground" />
+    <monochrome android:drawable="@mipmap/ic_launcher_foreground" />
+</adaptive-icon>

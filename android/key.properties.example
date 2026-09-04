@@ -1,0 +1,6 @@
+# Copy to android/key.properties and fill in. Never commit the real file.
+storePassword=
+keyPassword=
+keyAlias=upload
+# Absolute path, or relative to android/app/
+storeFile=../../notsince-upload.jks

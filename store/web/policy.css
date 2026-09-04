@@ -1,0 +1,307 @@
+/* ---------------------------------------------------------------------------
+   Policy pages.
+
+   Written to sit on a shared site alongside other apps' policies, so every
+   rule is namespaced under .policy and nothing here styles a bare element or
+   touches html/body layout. Dropping this file next to another stylesheet
+   cannot change anything outside a .policy block.
+
+   The palette matches the notsince app so the page reads as the same product.
+   Retheme one app by overriding the custom properties on its
+   [data-app="..."] attribute — see the bottom of this file.
+--------------------------------------------------------------------------- */
+
+.policy {
+  /* Ink, paper and green, the same three the app is built from. */
+  --policy-ink: #173404;
+  --policy-paper: #faf8f2;
+  --policy-tint: #eaf3de;
+  --policy-green: #3b6d11;
+  --policy-muted: #173404a8;
+  --policy-rule: #1734042e;
+
+  --policy-radius: 18px;
+  --policy-measure: 68ch;
+
+  --policy-sans: "Quicksand", ui-rounded, "SF Pro Rounded", "Segoe UI",
+    system-ui, -apple-system, sans-serif;
+
+  box-sizing: border-box;
+  max-width: var(--policy-measure);
+  margin: 0 auto;
+  padding: clamp(24px, 5vw, 56px) clamp(20px, 5vw, 32px) 72px;
+
+  font-family: var(--policy-sans);
+  font-size: 17px;
+  line-height: 1.6;
+  color: var(--policy-ink);
+  background: var(--policy-paper);
+
+  -webkit-text-size-adjust: 100%;
+  text-rendering: optimizeLegibility;
+}
+
+.policy *,
+.policy *::before,
+.policy *::after {
+  box-sizing: inherit;
+}
+
+/* --- Header ------------------------------------------------------------- */
+
+.policy__head {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  padding-bottom: 26px;
+  margin-bottom: 30px;
+  border-bottom: 2px solid var(--policy-ink);
+}
+
+/* The app's own icon, redrawn in CSS rather than shipped as an image, so the
+   page has no assets to host beyond this stylesheet. */
+.policy__mark {
+  flex: 0 0 auto;
+  display: grid;
+  place-items: center;
+  width: 68px;
+  height: 68px;
+  border: 3px solid var(--policy-ink);
+  border-radius: 20px;
+  background: var(--policy-tint);
+  font-size: 30px;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  line-height: 1;
+  color: var(--policy-ink);
+}
+
+.policy__app {
+  margin: 0;
+  font-size: 15px;
+  font-weight: 700;
+  letter-spacing: 0.01em;
+  color: var(--policy-green);
+}
+
+.policy__title {
+  margin: 2px 0 4px;
+  font-size: clamp(28px, 6vw, 36px);
+  font-weight: 700;
+  line-height: 1.15;
+  letter-spacing: -0.015em;
+}
+
+.policy__meta {
+  margin: 0;
+  font-size: 14px;
+  color: var(--policy-muted);
+}
+
+/* --- Body --------------------------------------------------------------- */
+
+.policy__lede {
+  margin: 0 0 34px;
+  padding: 20px 22px;
+  border: 2px solid var(--policy-ink);
+  border-radius: var(--policy-radius);
+  background: var(--policy-tint);
+  font-size: 18px;
+  font-weight: 600;
+  line-height: 1.5;
+}
+
+.policy__section {
+  margin-bottom: 34px;
+}
+
+.policy__section h2 {
+  margin: 0 0 10px;
+  font-size: 21px;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+}
+
+.policy__section p {
+  margin: 0 0 14px;
+}
+
+.policy__section p:last-child {
+  margin-bottom: 0;
+}
+
+.policy__note {
+  padding-left: 16px;
+  border-left: 3px solid var(--policy-green);
+  font-size: 15.5px;
+  color: var(--policy-muted);
+}
+
+/* --- Permissions list --------------------------------------------------- */
+
+.policy__perms {
+  margin: 0 0 16px;
+  padding: 0;
+}
+
+.policy__perms dt {
+  margin-top: 18px;
+  font-weight: 700;
+}
+
+.policy__perms dt:first-child {
+  margin-top: 0;
+}
+
+.policy__perms dd {
+  margin: 4px 0 0;
+  padding-left: 16px;
+  border-left: 2px solid var(--policy-rule);
+  color: var(--policy-muted);
+}
+
+/* The raw Android permission name, for anyone checking the manifest. */
+.policy__perm-id {
+  display: inline-block;
+  margin-left: 6px;
+  padding: 2px 8px;
+  border-radius: 999px;
+  background: var(--policy-tint);
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  color: var(--policy-green);
+  vertical-align: 1px;
+}
+
+/* --- Contact and footer ------------------------------------------------- */
+
+.policy__section--contact {
+  padding: 20px 22px;
+  border: 2px solid var(--policy-ink);
+  border-radius: var(--policy-radius);
+  background: var(--policy-tint);
+}
+
+.policy__section--contact h2 {
+  font-size: 18px;
+}
+
+.policy__foot {
+  padding-top: 22px;
+  border-top: 2px solid var(--policy-rule);
+  font-size: 14px;
+  color: var(--policy-muted);
+}
+
+.policy__foot p {
+  margin: 0;
+}
+
+/* --- Shared elements ---------------------------------------------------- */
+
+.policy a {
+  color: var(--policy-green);
+  font-weight: 600;
+  text-decoration-thickness: 2px;
+  text-underline-offset: 3px;
+}
+
+.policy a:hover,
+.policy a:focus-visible {
+  text-decoration-thickness: 3px;
+}
+
+.policy a:focus-visible {
+  outline: 3px solid var(--policy-green);
+  outline-offset: 3px;
+  border-radius: 3px;
+}
+
+.policy code {
+  padding: 1px 6px;
+  border-radius: 6px;
+  background: var(--policy-tint);
+  font-family: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+  font-size: 0.88em;
+}
+
+.policy strong {
+  font-weight: 700;
+}
+
+/* --- Dark mode ---------------------------------------------------------- */
+
+/* Mirrors the app's dark theme: a warm near-black with green in it rather
+   than a neutral grey, and ink that inverts to pale so the outlines still
+   read. */
+@media (prefers-color-scheme: dark) {
+  .policy {
+    --policy-ink: #e6f0d8;
+    --policy-paper: #11170d;
+    --policy-tint: #1e2a16;
+    --policy-green: #8fc45a;
+    --policy-muted: #e6f0d8a8;
+    --policy-rule: #e6f0d82e;
+  }
+}
+
+/* --- Narrow screens ----------------------------------------------------- */
+
+@media (max-width: 480px) {
+  .policy {
+    font-size: 16px;
+  }
+
+  .policy__head {
+    align-items: flex-start;
+    gap: 14px;
+  }
+
+  .policy__mark {
+    width: 54px;
+    height: 54px;
+    border-radius: 16px;
+    font-size: 24px;
+  }
+
+  .policy__perm-id {
+    display: block;
+    width: fit-content;
+    margin: 4px 0 0;
+  }
+}
+
+/* --- Print -------------------------------------------------------------- */
+
+@media print {
+  .policy {
+    max-width: none;
+    padding: 0;
+    color: #000;
+    background: #fff;
+    font-size: 11pt;
+  }
+
+  .policy__lede,
+  .policy__section--contact {
+    background: none;
+  }
+
+  .policy__section {
+    break-inside: avoid;
+  }
+}
+
+/* ---------------------------------------------------------------------------
+   Adding another app to the shared site
+   ---------------------------------------------------------------------------
+   Reuse the markup, change data-app, and override the four colours:
+
+   .policy[data-app="otherapp"] {
+     --policy-ink:   #1a1a1a;
+     --policy-paper: #ffffff;
+     --policy-tint:  #f0f0f0;
+     --policy-green: #0055cc;
+   }
+--------------------------------------------------------------------------- */
