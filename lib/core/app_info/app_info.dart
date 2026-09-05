@@ -6,10 +6,6 @@ abstract final class AppInfo {
 
   /// Keep in step with `version:` in pubspec.yaml.
   static const version = '1.0.0';
-
-  // TODO(you): replace before publishing. Google Play requires a working
-  // contact address on the listing, and the policy pages must name a real
-  // controller — a placeholder here will fail review.
   static const developer = 'Caleb';
   static const contactEmail = 'sabilacalebj@gmail.com';
   static const privacyUrl = 'https://services.jakisatech.com/#notsince';
