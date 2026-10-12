@@ -1,3 +1,5 @@
+import 'package:notsince/features/planner/data/planner_store.dart';
+import 'package:notsince/theme/app_colors.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:notsince/features/counter/application/tracker_controller.dart';
@@ -35,7 +37,9 @@ class _CounterFormScreenState extends ConsumerState<CounterFormScreen> {
   final _name = TextEditingController();
   late DateTime _startedAt = ref.read(clockProvider).now();
   String _emoji = kCounterIcons.first;
-  int _colorIndex = 0;
+  late int _colorIndex = AppColors.palette
+      .indexOf(ref.read(plannerProvider).accent)
+      .clamp(0, AppColors.palette.length - 1);
 
   @override
   void dispose() {
@@ -73,12 +77,17 @@ class _CounterFormScreenState extends ConsumerState<CounterFormScreen> {
   void _save() {
     final name = _name.text.trim();
     if (name.isEmpty) return;
-    final created = ref.read(trackersProvider.notifier).create(
+    final created = ref
+        .read(trackersProvider.notifier)
+        .create(
           name: name,
           startedAt: _startedAt,
           emoji: _emoji,
           colorIndex: _colorIndex,
         );
+    ref
+        .read(plannerProvider.notifier)
+        .setHabit(created.id, color: AppColors.palette[_colorIndex]);
     Navigator.of(context).pop(created.id);
   }
 
@@ -133,10 +142,7 @@ class _CounterFormScreenState extends ConsumerState<CounterFormScreen> {
                   const SizedBox(height: 28),
                   const _Label('Counting since'),
                   const SizedBox(height: 12),
-                  StartTimeCard(
-                    startedAt: _startedAt,
-                    onTap: _pickStart,
-                  ),
+                  StartTimeCard(startedAt: _startedAt, onTap: _pickStart),
                 ],
               ),
             ),
@@ -250,8 +256,9 @@ class ColorPicker extends StatelessWidget {
                   width: i == selected ? 4 : Sticker.thinBorder,
                 ),
                 shape: BoxShape.circle,
-                boxShadow:
-                    i == selected ? Sticker.shadow(ns.ink, const Offset(3, 3)) : null,
+                boxShadow: i == selected
+                    ? Sticker.shadow(ns.ink, const Offset(3, 3))
+                    : null,
               ),
             ),
           ),
@@ -261,7 +268,11 @@ class ColorPicker extends StatelessWidget {
 }
 
 class StartTimeCard extends StatelessWidget {
-  const StartTimeCard({super.key, required this.startedAt, required this.onTap});
+  const StartTimeCard({
+    super.key,
+    required this.startedAt,
+    required this.onTap,
+  });
 
   final DateTime startedAt;
   final VoidCallback onTap;
@@ -287,8 +298,7 @@ class StartTimeCard extends StatelessWidget {
                 ),
               ),
             ),
-            Icon(Icons.edit_calendar_rounded,
-                size: 20, color: ns.ink),
+            Icon(Icons.edit_calendar_rounded, size: 20, color: ns.ink),
           ],
         ),
       ),
