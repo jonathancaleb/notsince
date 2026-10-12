@@ -10,8 +10,8 @@ import 'package:flutter/material.dart';
 /// The ink colour is passed in rather than baked in, because it flips between
 /// light and dark themes.
 abstract final class Sticker {
-  static const double border = 2;
-  static const double thinBorder = 2;
+  static const double border = 0.7;
+  static const double thinBorder = 0.7;
 
   static const double radius = 24;
 
@@ -33,11 +33,12 @@ abstract final class Sticker {
   static const double navClearance = 104;
 
   static BoxBorder outline(Color ink) =>
-      Border.all(color: ink, width: border);
+      Border.all(color: ink.withValues(alpha: ink.computeLuminance() > .5 ? .02 : .10), width: border);
 
   static BoxBorder thinOutline(Color ink) =>
-      Border.all(color: ink, width: thinBorder);
+      Border.all(color: ink.withValues(alpha: ink.computeLuminance() > .5 ? .02 : .10), width: thinBorder);
 
   static List<BoxShadow> shadow(Color ink, Offset offset) =>
-      [BoxShadow(color: ink, offset: offset, blurRadius: 0)];
+      [BoxShadow(color: Colors.black.withValues(alpha: .05), offset: const Offset(0, 4), blurRadius: 18)];
 }
+

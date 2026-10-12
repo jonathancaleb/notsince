@@ -56,8 +56,8 @@ class NsColors extends ThemeExtension<NsColors> {
 
   /// Warm off-white ground, deep green ink.
   static const light = NsColors(
-    ink: Color(0xFF173404),
-    paper: Color(0xFFFAF8F2),
+    ink: Color(0xFF302C27),
+    paper: Color(0xFFFAF7F0),
     primary: Color(0xFF3B6D11),
     accent: Color(0xFF639922),
     tint: Color(0xFFEAF3DE),
@@ -97,12 +97,12 @@ class NsColors extends ThemeExtension<NsColors> {
   /// just enough that pale ink and ink-coloured text sit on it legibly, since
   /// the light crayons are far too bright to carry dark text on a dark page.
   static const dark = NsColors(
-    ink: Color(0xFFE6F0D8),
-    paper: Color(0xFF11170D),
+    ink: Color(0xFFF3EDE3),
+    paper: Color(0xFF171513),
     primary: Color(0xFF8FC45A),
     accent: Color(0xFFA3D46C),
-    tint: Color(0xFF1E2A16),
-    onInk: Color(0xFF11170D),
+    tint: Color(0xFF1E1C1A),
+    onInk: Color(0xFF171513),
     muted: Color(0x99E6F0D8),
     alarm: Color(0xFFD9922A),
     alarmTint: Color(0xFF2E2411),
@@ -195,3 +195,4 @@ extension NsColorsContext on BuildContext {
   /// The palette for the current theme.
   NsColors get ns => Theme.of(this).extension<NsColors>() ?? NsColors.light;
 }
+

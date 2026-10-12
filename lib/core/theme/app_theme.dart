@@ -42,8 +42,8 @@ ThemeData _theme(NsColors ns, Brightness brightness) {
     surfaceContainerHigh: ns.tint,
     surfaceContainerHighest: ns.tint,
     onSurfaceVariant: ns.muted,
-    outline: ns.ink,
-    outlineVariant: ns.ink,
+    outline: ns.ink.withValues(alpha: .10),
+    outlineVariant: ns.ink.withValues(alpha: brightness == Brightness.dark ? .02 : .10),
     inverseSurface: ns.ink,
     onInverseSurface: ns.paper,
     inversePrimary: ns.accent,
@@ -130,7 +130,7 @@ ThemeData _theme(NsColors ns, Brightness brightness) {
       contentTextStyle: AppType.bodyText.copyWith(color: ns.paper),
       behavior: SnackBarBehavior.floating,
     ),
-    dividerTheme: DividerThemeData(color: ns.ink, thickness: 2, space: 2),
+    dividerTheme: DividerThemeData(color: ns.ink, thickness: 0.7, space: 2),
   );
 }
 
@@ -138,3 +138,4 @@ OutlineInputBorder _fieldBorder(Color ink, double width) => OutlineInputBorder(
       borderRadius: BorderRadius.circular(Sticker.smallRadius),
       borderSide: BorderSide(color: ink, width: width),
     );
+
