@@ -50,15 +50,19 @@ class HabitPlant extends StatelessWidget {
         tween: Tween(begin: 0, end: stage.toDouble()),
         duration: const Duration(milliseconds: 650),
         curve: Curves.easeOutCubic,
-        builder: (context, value, _) => CustomPaint(
-          painter: _PlantPainter(
-            growth: value,
-            color: color,
-            ink: ns.ink,
-            pot: ns.tint,
-            paper: ns.paper,
+        builder: (context, value, _) => RepaintBoundary(
+          // The growth tween repaints this layer ~40 times; the boundary keeps
+          // it from repainting the cards and nav around it.
+          child: CustomPaint(
+            painter: _PlantPainter(
+              growth: value,
+              color: color,
+              ink: ns.ink,
+              pot: ns.tint,
+              paper: ns.paper,
+            ),
+            size: size,
           ),
-          size: size,
         ),
       ),
     );

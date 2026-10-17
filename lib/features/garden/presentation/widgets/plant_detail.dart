@@ -21,9 +21,11 @@ class PlantIllustration extends StatelessWidget {
       curve: Curves.easeOutBack,
       builder: (context, value, child) =>
           Transform.scale(scale: value, child: child),
-      child: CustomPaint(
-        size: const Size(112, 120),
-        painter: _PlantPainter(stage, wilted, color),
+      child: RepaintBoundary(
+        child: CustomPaint(
+          size: const Size(112, 120),
+          painter: _PlantPainter(stage, wilted, color),
+        ),
       ),
     ),
   );

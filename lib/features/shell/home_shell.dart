@@ -45,6 +45,26 @@ class HomeShell extends ConsumerStatefulWidget {
 class _HomeShellState extends ConsumerState<HomeShell> {
   bool _ringScreenOpen = false;
 
+  /// Tabs build once, on first visit, and stay mounted afterwards.
+  ///
+  /// A plain IndexedStack builds all seven screens up front, which pays for
+  /// garden plants, the planner timeline and the reports grid before the
+  /// person has asked for any of them. Deferring to first visit keeps the
+  /// cold start on the Today tab; keeping the widget in the stack after that
+  /// is what preserves each tab's own state — exactly what the IndexedStack
+  /// gave us.
+  final Set<HomeTab> _visited = {HomeTab.home};
+
+  static const _screens = <Widget>[
+    TodayScreen(),
+    CounterScreen(),
+    AlarmsScreen(),
+    NotesHubScreen(),
+    PlannerScreen(),
+    GardenScreen(),
+    InsightsScreen(),
+  ];
+
   /// Opens the ring screen when the platform starts ringing one of our alarms.
   ///
   /// The full-screen intent already brings the app forward; this is what puts
@@ -77,6 +97,7 @@ class _HomeShellState extends ConsumerState<HomeShell> {
     });
 
     final tab = ref.watch(homeTabProvider);
+    _visited.add(tab);
 
     return Scaffold(
       // The nav floats over the content rather than sitting below it, so the
@@ -85,17 +106,16 @@ class _HomeShellState extends ConsumerState<HomeShell> {
       body: Stack(
         children: [
           // IndexedStack, not a switch: the habit pager and the notes grid
-          // should still be where you left them when you come back.
+          // should still be where you left them when you come back. Tabs are
+          // only built on first visit (see [_visited]).
           IndexedStack(
             index: tab.index,
-            children: const [
-              TodayScreen(),
-              CounterScreen(),
-              AlarmsScreen(),
-              NotesHubScreen(),
-              PlannerScreen(),
-              GardenScreen(),
-              InsightsScreen(),
+            children: [
+              for (final t in HomeTab.values)
+                if (_visited.contains(t))
+                  _screens[t.index]
+                else
+                  const SizedBox.shrink(),
             ],
           ),
           const Positioned(left: 0, right: 0, bottom: 0, child: _NavIsland()),

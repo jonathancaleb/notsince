@@ -147,11 +147,16 @@ class GardenScreen extends ConsumerWidget {
                                 child: SizedBox(
                                   width: 68,
                                   height: 72,
-                                  child: CustomPaint(
-                                    painter: _PlantPainter(
-                                      growth.stage,
-                                      growth.wilted,
-                                      habitColor(context, state, tracker),
+                                  // One boundary per plant: each card's painter
+                                  // repaints alone when its stage changes, and
+                                  // the page's 1 Hz clock does not touch them.
+                                  child: RepaintBoundary(
+                                    child: CustomPaint(
+                                      painter: _PlantPainter(
+                                        growth.stage,
+                                        growth.wilted,
+                                        habitColor(context, state, tracker),
+                                      ),
                                     ),
                                   ),
                                 ),
