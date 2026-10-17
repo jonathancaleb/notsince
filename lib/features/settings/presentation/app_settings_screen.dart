@@ -266,25 +266,30 @@ class _ThemePicker extends StatelessWidget {
           Expanded(
             child: Padding(
               padding: const EdgeInsets.only(right: 10),
-              child: GestureDetector(
-                onTap: () => onSelected(mode),
-                child: AnimatedContainer(
-                  duration: const Duration(milliseconds: 160),
-                  padding: const EdgeInsets.symmetric(vertical: 14),
-                  decoration: BoxDecoration(
-                    color: mode == selected ? ns.accent : ns.paper,
-                    border: Sticker.thinOutline(ns.ink),
-                    borderRadius: BorderRadius.circular(Sticker.tinyRadius),
-                    boxShadow: mode == selected
-                        ? Sticker.shadow(ns.ink, const Offset(3, 3))
-                        : null,
-                  ),
-                  child: Column(
-                    children: [
-                      Icon(icon, size: 20, color: ns.ink),
-                      const SizedBox(height: 4),
-                      Text(label, style: AppType.smallStrong),
-                    ],
+              child: Semantics(
+                button: true,
+                selected: mode == selected,
+                label: '$label theme',
+                child: GestureDetector(
+                  onTap: () => onSelected(mode),
+                  child: AnimatedContainer(
+                    duration: const Duration(milliseconds: 160),
+                    padding: const EdgeInsets.symmetric(vertical: 14),
+                    decoration: BoxDecoration(
+                      color: mode == selected ? ns.accent : ns.paper,
+                      border: Sticker.thinOutline(ns.ink),
+                      borderRadius: BorderRadius.circular(Sticker.tinyRadius),
+                      boxShadow: mode == selected
+                          ? Sticker.shadow(ns.ink, const Offset(3, 3))
+                          : null,
+                    ),
+                    child: Column(
+                      children: [
+                        Icon(icon, size: 20, color: ns.ink),
+                        const SizedBox(height: 4),
+                        Text(label, style: AppType.smallStrong),
+                      ],
+                    ),
                   ),
                 ),
               ),
@@ -345,17 +350,20 @@ class _AboutRow extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final ns = context.ns;
-    return GestureDetector(
-      onTap: onTap,
-      child: StickerCard(
-        color: ns.paper,
-        padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 16),
-        radius: Sticker.smallRadius,
-        child: Row(
-          children: [
-            Expanded(child: Text(label, style: AppType.label)),
-            Icon(Icons.chevron_right_rounded, size: 22, color: ns.ink),
-          ],
+    return Semantics(
+      button: true,
+      child: GestureDetector(
+        onTap: onTap,
+        child: StickerCard(
+          color: ns.paper,
+          padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 16),
+          radius: Sticker.smallRadius,
+          child: Row(
+            children: [
+              Expanded(child: Text(label, style: AppType.label)),
+              Icon(Icons.chevron_right_rounded, size: 22, color: ns.ink),
+            ],
+          ),
         ),
       ),
     );

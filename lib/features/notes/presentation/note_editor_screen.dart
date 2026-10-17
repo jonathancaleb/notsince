@@ -21,9 +21,9 @@ class NoteEditorScreen extends ConsumerStatefulWidget {
   final String id;
 
   static Future<void> open(BuildContext context, String id) {
-    return Navigator.of(context).push<void>(
-      MaterialPageRoute(builder: (_) => NoteEditorScreen(id: id)),
-    );
+    return Navigator.of(
+      context,
+    ).push<void>(MaterialPageRoute(builder: (_) => NoteEditorScreen(id: id)));
   }
 
   @override
@@ -58,7 +58,9 @@ class _NoteEditorScreenState extends ConsumerState<NoteEditorScreen> {
   }
 
   void _save() {
-    ref.read(notesProvider.notifier).save(
+    ref
+        .read(notesProvider.notifier)
+        .save(
           widget.id,
           title: _title.text,
           body: _body.text,
@@ -86,8 +88,13 @@ class _NoteEditorScreenState extends ConsumerState<NoteEditorScreen> {
     if (!mounted) return;
 
     setState(() {
-      _dueAt = DateTime(date.year, date.month, date.day,
-          time?.hour ?? 9, time?.minute ?? 0);
+      _dueAt = DateTime(
+        date.year,
+        date.month,
+        date.day,
+        time?.hour ?? 9,
+        time?.minute ?? 0,
+      );
     });
     _save();
   }
@@ -163,8 +170,9 @@ class _NoteEditorScreenState extends ConsumerState<NoteEditorScreen> {
                                   decorationThickness: 2,
                                 ),
                                 decoration: InputDecoration(
-                                  hintText:
-                                      _isTask ? 'What needs doing?' : 'Title',
+                                  hintText: _isTask
+                                      ? 'What needs doing?'
+                                      : 'Title',
                                   filled: false,
                                   border: InputBorder.none,
                                   enabledBorder: InputBorder.none,
@@ -239,7 +247,9 @@ class _NoteEditorScreenState extends ConsumerState<NoteEditorScreen> {
                       isTask: _isTask,
                       onChanged: (v) {
                         setState(() => _isTask = v);
-                        ref.read(notesProvider.notifier).setIsTask(widget.id, v);
+                        ref
+                            .read(notesProvider.notifier)
+                            .setIsTask(widget.id, v);
                       },
                     ),
                   ],
@@ -278,31 +288,38 @@ class _DueChip extends StatelessWidget {
     final ns = context.ns;
     final overdue = dueAt != null && DateTime.now().isAfter(dueAt!);
 
-    return GestureDetector(
-      onTap: onTap,
-      onLongPress: dueAt == null ? null : onClear,
-      child: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
-        decoration: BoxDecoration(
-          // Overdue is marked by weight, not by red â€” a late task is still a
-          // task, not a failure.
-          color: overdue ? ns.ink : ns.paper,
-          border: Sticker.thinOutline(ns.ink),
-          borderRadius: BorderRadius.circular(Sticker.tinyRadius),
-        ),
-        child: Row(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Icon(Icons.schedule_rounded,
-                size: 17, color: overdue ? ns.paper : ns.ink),
-            const SizedBox(width: 6),
-            Text(
-              dueAt == null ? 'Due' : dateTimeLabel(dueAt!),
-              style: AppType.smallStrong.copyWith(
+    return Semantics(
+      button: true,
+      label: dueAt == null ? 'Set a due time' : 'Due ${dateTimeLabel(dueAt!)}',
+      child: GestureDetector(
+        onTap: onTap,
+        onLongPress: dueAt == null ? null : onClear,
+        child: Container(
+          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
+          decoration: BoxDecoration(
+            // Overdue is marked by weight, not by red — a late task is still a
+            // task, not a failure.
+            color: overdue ? ns.ink : ns.paper,
+            border: Sticker.thinOutline(ns.ink),
+            borderRadius: BorderRadius.circular(Sticker.tinyRadius),
+          ),
+          child: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Icon(
+                Icons.schedule_rounded,
+                size: 17,
                 color: overdue ? ns.paper : ns.ink,
               ),
-            ),
-          ],
+              const SizedBox(width: 6),
+              Text(
+                dueAt == null ? 'Due' : dateTimeLabel(dueAt!),
+                style: AppType.smallStrong.copyWith(
+                  color: overdue ? ns.paper : ns.ink,
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );
@@ -319,33 +336,37 @@ class _KindToggle extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final ns = context.ns;
-    return GestureDetector(
-      onTap: () => onChanged(!isTask),
-      child: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
-        decoration: BoxDecoration(
-          color: isTask ? ns.ink : ns.paper,
-          border: Sticker.thinOutline(ns.ink),
-          borderRadius: BorderRadius.circular(Sticker.tinyRadius),
-        ),
-        child: Row(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Icon(
-              isTask
-                  ? Icons.check_box_rounded
-                  : Icons.check_box_outline_blank_rounded,
-              size: 18,
-              color: isTask ? ns.paper : ns.ink,
-            ),
-            const SizedBox(width: 6),
-            Text(
-              'Task',
-              style: AppType.kicker.copyWith(
+    return Semantics(
+      button: true,
+      label: isTask ? 'Task' : 'Note',
+      child: GestureDetector(
+        onTap: () => onChanged(!isTask),
+        child: Container(
+          padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
+          decoration: BoxDecoration(
+            color: isTask ? ns.ink : ns.paper,
+            border: Sticker.thinOutline(ns.ink),
+            borderRadius: BorderRadius.circular(Sticker.tinyRadius),
+          ),
+          child: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Icon(
+                isTask
+                    ? Icons.check_box_rounded
+                    : Icons.check_box_outline_blank_rounded,
+                size: 18,
                 color: isTask ? ns.paper : ns.ink,
               ),
-            ),
-          ],
+              const SizedBox(width: 6),
+              Text(
+                'Task',
+                style: AppType.kicker.copyWith(
+                  color: isTask ? ns.paper : ns.ink,
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );

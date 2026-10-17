@@ -277,20 +277,26 @@ class NoteTagPicker extends StatelessWidget {
       runSpacing: 12,
       children: [
         for (final tag in kNoteTags)
-          GestureDetector(
-            onTap: () => onSelected(tag),
-            child: Container(
-              width: 36,
-              height: 36,
-              decoration: BoxDecoration(
-                color: ns.noteTag(tag),
-                border: Border.all(
-                  color: ns.ink,
-                  width: tag == selected ? 4 : Sticker.thinBorder,
+          Semantics(
+            button: true,
+            selected: tag == selected,
+            label: 'Tag $tag',
+            child: GestureDetector(
+              onTap: () => onSelected(tag),
+              child: Container(
+                width: 36,
+                height: 36,
+                decoration: BoxDecoration(
+                  color: ns.noteTag(tag),
+                  border: Border.all(
+                    color: ns.ink,
+                    width: tag == selected ? 4 : Sticker.thinBorder,
+                  ),
+                  shape: BoxShape.circle,
+                  boxShadow: tag == selected
+                      ? Sticker.shadow(ns.ink, const Offset(3, 3))
+                      : null,
                 ),
-                shape: BoxShape.circle,
-                boxShadow:
-                    tag == selected ? Sticker.shadow(ns.ink, const Offset(3, 3)) : null,
               ),
             ),
           ),

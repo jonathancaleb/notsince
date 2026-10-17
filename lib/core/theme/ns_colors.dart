@@ -38,7 +38,8 @@ class NsColors extends ThemeExtension<NsColors> {
   /// Text on a filled primary surface.
   final Color onInk;
 
-  /// Secondary text: ink softened rather than grey.
+  /// Secondary text: ink softened rather than grey. Light muted sits at
+  /// 5.2:1 on paper; dark muted at 8.2:1.
   final Color muted;
 
   final Color alarm;
@@ -62,7 +63,7 @@ class NsColors extends ThemeExtension<NsColors> {
     accent: Color(0xFF639922),
     tint: Color(0xFFEAF3DE),
     onInk: Color(0xFFFFFFFF),
-    muted: Color(0xFF797168),
+    muted: Color(0xFF6E675F),
     alarm: Color(0xFFF5A623),
     alarmTint: Color(0xFFFDF0D9),
     crayons: [

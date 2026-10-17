@@ -86,39 +86,45 @@ class _AlarmTile extends ConsumerWidget {
     // reads as a list rather than the row disappearing into the page.
     final enabled = entry.isEnabled;
 
-    return GestureDetector(
-      onTap: () => AlarmFormScreen.open(context, id: entry.id),
-      child: StickerCard(
-        color: enabled ? ns.alarmTint : ns.paper,
-        padding: const EdgeInsets.fromLTRB(20, 14, 12, 14),
-        child: Row(
-          children: [
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    clockLabel(entry.hour, entry.minute),
-                    style: AppType.clock.copyWith(
-                      color: enabled ? ns.ink : ns.muted,
+    return Semantics(
+      button: true,
+      label:
+          '${clockLabel(entry.hour, entry.minute)}, ${entry.label}, '
+          '${repeatLabel(entry.repeatDays)}',
+      child: GestureDetector(
+        onTap: () => AlarmFormScreen.open(context, id: entry.id),
+        child: StickerCard(
+          color: enabled ? ns.alarmTint : ns.paper,
+          padding: const EdgeInsets.fromLTRB(20, 14, 12, 14),
+          child: Row(
+            children: [
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      clockLabel(entry.hour, entry.minute),
+                      style: AppType.clock.copyWith(
+                        color: enabled ? ns.ink : ns.muted,
+                      ),
                     ),
-                  ),
-                  const SizedBox(height: 2),
-                  Text(
-                    '${entry.label}  ·  ${repeatLabel(entry.repeatDays)}',
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
-                    style: AppType.muted(ns),
-                  ),
-                ],
+                    const SizedBox(height: 2),
+                    Text(
+                      '${entry.label}  ·  ${repeatLabel(entry.repeatDays)}',
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                      style: AppType.muted(ns),
+                    ),
+                  ],
+                ),
               ),
-            ),
-            StickerSwitch(
-              value: enabled,
-              onChanged: (v) =>
-                  ref.read(alarmsProvider.notifier).setEnabled(entry.id, v),
-            ),
-          ],
+              StickerSwitch(
+                value: enabled,
+                onChanged: (v) =>
+                    ref.read(alarmsProvider.notifier).setEnabled(entry.id, v),
+              ),
+            ],
+          ),
         ),
       ),
     );

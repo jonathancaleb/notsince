@@ -65,12 +65,27 @@ class DashboardScreen extends ConsumerWidget {
 
 String _dateLabel(DateTime dt) {
   const days = [
-    'Monday', 'Tuesday', 'Wednesday', 'Thursday',
-    'Friday', 'Saturday', 'Sunday',
+    'Monday',
+    'Tuesday',
+    'Wednesday',
+    'Thursday',
+    'Friday',
+    'Saturday',
+    'Sunday',
   ];
   const months = [
-    'January', 'February', 'March', 'April', 'May', 'June',
-    'July', 'August', 'September', 'October', 'November', 'December',
+    'January',
+    'February',
+    'March',
+    'April',
+    'May',
+    'June',
+    'July',
+    'August',
+    'September',
+    'October',
+    'November',
+    'December',
   ];
   return '${days[dt.weekday - 1]}, ${dt.day} ${months[dt.month - 1]}';
 }
@@ -136,13 +151,9 @@ class _Header extends ConsumerWidget {
           child: Row(
             mainAxisSize: MainAxisSize.min,
             children: [
-              Icon(Icons.wb_sunny_rounded,
-                  size: 15, color: ns.ink),
+              Icon(Icons.wb_sunny_rounded, size: 15, color: ns.ink),
               const SizedBox(width: 8),
-              Text(
-                _dateLabel(now),
-                style: AppType.kicker,
-              ),
+              Text(_dateLabel(now), style: AppType.kicker),
             ],
           ),
         ),
@@ -190,75 +201,83 @@ class _CountHero extends ConsumerWidget {
     final crayon = ns.crayon(tracker.colorIndex);
     final days = daysOf(progress.elapsed);
     final next = progress.nextMilestone;
-    final passedCount =
-        crossedMilestones(tracker, tracker.startedAt.add(progress.elapsed)).length;
+    final passedCount = crossedMilestones(
+      tracker,
+      tracker.startedAt.add(progress.elapsed),
+    ).length;
 
-    return GestureDetector(
+    return Semantics(
+      button: true,
       onTap: () => ref.read(homeTabProvider.notifier).select(HomeTab.habit),
-      child: StickerCard(
-        color: ns.crayonTint(tracker.colorIndex),
-        padding: const EdgeInsets.fromLTRB(22, 18, 22, 22),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            Row(
-              children: [
-                Text(tracker.emoji, style: AppType.glyph(26)),
-                const SizedBox(width: 10),
-                Expanded(
-                  child: Text(
-                    tracker.name,
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
-                    style: AppType.cardTitle,
+      child: GestureDetector(
+        onTap: () => ref.read(homeTabProvider.notifier).select(HomeTab.habit),
+        child: StickerCard(
+          color: ns.crayonTint(tracker.colorIndex),
+          padding: const EdgeInsets.fromLTRB(22, 18, 22, 22),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              Row(
+                children: [
+                  Text(tracker.emoji, style: AppType.glyph(26)),
+                  const SizedBox(width: 10),
+                  Expanded(
+                    child: Text(
+                      tracker.name,
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                      style: AppType.cardTitle,
+                    ),
                   ),
+                ],
+              ),
+              const SizedBox(height: 6),
+              Text(
+                habitEncouragement(
+                  progress.elapsed,
+                  hasHistory: tracker.history.isNotEmpty,
                 ),
-              ],
-            ),
-            const SizedBox(height: 6),
-            Text(
-              habitEncouragement(progress.elapsed,
-                  hasHistory: tracker.history.isNotEmpty),
-              textAlign: TextAlign.center,
-              style: AppType.hint,
-            ),
-            const SizedBox(height: 12),
-            Row(
-              children: [
-                HabitPlant(
-                  stage: HabitPlant.stageFor(
-                    passed: passedCount,
-                    total: tracker.sortedMilestones.length,
+                textAlign: TextAlign.center,
+                style: AppType.hint,
+              ),
+              const SizedBox(height: 12),
+              Row(
+                children: [
+                  HabitPlant(
+                    stage: HabitPlant.stageFor(
+                      passed: passedCount,
+                      total: tracker.sortedMilestones.length,
+                    ),
+                    color: crayon,
+                    size: const Size(88, 100),
                   ),
-                  color: crayon,
-                  size: const Size(88, 100),
-                ),
-                const SizedBox(width: 10),
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        '$days',
-                        style: AppType.counter(64).copyWith(color: ns.ink),
-                      ),
-                      Text(
-                        days == 1 ? 'day' : 'days',
-                        style: AppType.subtitle,
-                      ),
-                      const SizedBox(height: 6),
-                      Text(
-                        next == null
-                            ? 'Fully grown'
-                            : '$passedCount of ${tracker.sortedMilestones.length} Â· next ${milestoneLabel(next)}',
-                        style: AppType.muted(ns),
-                      ),
-                    ],
+                  const SizedBox(width: 10),
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          '$days',
+                          style: AppType.counter(64).copyWith(color: ns.ink),
+                        ),
+                        Text(
+                          days == 1 ? 'day' : 'days',
+                          style: AppType.subtitle,
+                        ),
+                        const SizedBox(height: 6),
+                        Text(
+                          next == null
+                              ? 'Fully grown'
+                              : '$passedCount of ${tracker.sortedMilestones.length} Â· next ${milestoneLabel(next)}',
+                          style: AppType.muted(ns),
+                        ),
+                      ],
+                    ),
                   ),
-                ),
-              ],
-            ),
-          ],
+                ],
+              ),
+            ],
+          ),
         ),
       ),
     );
@@ -273,33 +292,36 @@ class _NextAlarmCard extends ConsumerWidget {
     final ns = context.ns;
     final next = ref.watch(nextAlarmProvider);
 
-    return GestureDetector(
-      onTap: () => ref.read(homeTabProvider.notifier).select(HomeTab.alarms),
-      child: StickerCard(
-        color: next == null ? ns.paper : ns.alarmTint,
-        padding: const EdgeInsets.fromLTRB(16, 14, 16, 16),
-        radius: Sticker.radius,
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text('ðŸ””', style: AppType.glyph(20)),
-            const SizedBox(height: 8),
-            Text(
-              next == null
-                  ? 'None set'
-                  : clockLabel(next.entry.hour, next.entry.minute),
-              style: next == null ? AppType.statSmall : AppType.stat,
-            ),
-            const SizedBox(height: 2),
-            Text(
-              next == null
-                  ? 'Next alarm'
-                  : repeatLabel(next.entry.repeatDays),
-              maxLines: 1,
-              overflow: TextOverflow.ellipsis,
-              style: AppType.muted(ns),
-            ),
-          ],
+    return Semantics(
+      button: true,
+      child: GestureDetector(
+        onTap: () => ref.read(homeTabProvider.notifier).select(HomeTab.alarms),
+        child: StickerCard(
+          color: next == null ? ns.paper : ns.alarmTint,
+          padding: const EdgeInsets.fromLTRB(16, 14, 16, 16),
+          radius: Sticker.radius,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text('ðŸ””', style: AppType.glyph(20)),
+              const SizedBox(height: 8),
+              Text(
+                next == null
+                    ? 'None set'
+                    : clockLabel(next.entry.hour, next.entry.minute),
+                style: next == null ? AppType.statSmall : AppType.stat,
+              ),
+              const SizedBox(height: 2),
+              Text(
+                next == null
+                    ? 'Next alarm'
+                    : repeatLabel(next.entry.repeatDays),
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+                style: AppType.muted(ns),
+              ),
+            ],
+          ),
         ),
       ),
     );
@@ -316,29 +338,32 @@ class _NotesCard extends ConsumerWidget {
     final openTasks = ref.watch(openTaskCountProvider);
     final now = ref.watch(clockProvider).now();
 
-    return GestureDetector(
-      onTap: () => ref.read(homeTabProvider.notifier).select(HomeTab.notes),
-      child: StickerCard(
-        color: notes.isEmpty ? ns.paper : ns.tint,
-        padding: const EdgeInsets.fromLTRB(16, 14, 16, 16),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(openTasks > 0 ? 'â˜‘' : 'ðŸ“', style: AppType.glyph(20)),
-            const SizedBox(height: 8),
-            Text('${notes.length}', style: AppType.stat),
-            const SizedBox(height: 2),
-            Text(
-              notes.isEmpty
-                  ? 'Notes & tasks'
-                  : openTasks > 0
-                      ? '$openTasks to do'
-                      : 'edited ${_ago(now.difference(notes.first.updatedAt))}',
-              maxLines: 1,
-              overflow: TextOverflow.ellipsis,
-              style: AppType.muted(ns),
-            ),
-          ],
+    return Semantics(
+      button: true,
+      child: GestureDetector(
+        onTap: () => ref.read(homeTabProvider.notifier).select(HomeTab.notes),
+        child: StickerCard(
+          color: notes.isEmpty ? ns.paper : ns.tint,
+          padding: const EdgeInsets.fromLTRB(16, 14, 16, 16),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(openTasks > 0 ? 'â˜‘' : 'ðŸ“', style: AppType.glyph(20)),
+              const SizedBox(height: 8),
+              Text('${notes.length}', style: AppType.stat),
+              const SizedBox(height: 2),
+              Text(
+                notes.isEmpty
+                    ? 'Notes & tasks'
+                    : openTasks > 0
+                    ? '$openTasks to do'
+                    : 'edited ${_ago(now.difference(notes.first.updatedAt))}',
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+                style: AppType.muted(ns),
+              ),
+            ],
+          ),
         ),
       ),
     );

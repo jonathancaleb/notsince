@@ -111,11 +111,11 @@ abstract final class AppType {
     fontWeight: FontWeight.w600,
   );
 
-  /// The floating nav's caption. (Sat at 11 px historically; the accessibility
-  /// pass raises it.)
+  /// The floating nav's caption. Kept at 12 px minimum so nav labels stay
+  /// readable and grow sanely with text scaling.
   static const navCaption = TextStyle(
     fontFamily: body,
-    fontSize: 11,
+    fontSize: 12,
     fontWeight: FontWeight.w600,
     height: 1.45,
   );

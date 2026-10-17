@@ -166,10 +166,7 @@ class _Label extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final ns = context.ns;
-    return Text(
-      text,
-      style: AppType.subhead.copyWith(color: ns.ink),
-    );
+    return Text(text, style: AppType.subhead.copyWith(color: ns.ink));
   }
 }
 
@@ -195,21 +192,26 @@ class IconPicker extends StatelessWidget {
       runSpacing: 10,
       children: [
         for (final emoji in kCounterIcons)
-          GestureDetector(
-            onTap: () => onSelected(emoji),
-            child: Container(
-              width: 52,
-              height: 52,
-              alignment: Alignment.center,
-              decoration: BoxDecoration(
-                color: emoji == selected ? color : ns.paper,
-                border: Sticker.thinOutline(ns.ink),
-                borderRadius: BorderRadius.circular(14),
-                boxShadow: emoji == selected
-                    ? Sticker.shadow(ns.ink, const Offset(3, 3))
-                    : null,
+          Semantics(
+            button: true,
+            selected: emoji == selected,
+            label: 'Icon $emoji',
+            child: GestureDetector(
+              onTap: () => onSelected(emoji),
+              child: Container(
+                width: 52,
+                height: 52,
+                alignment: Alignment.center,
+                decoration: BoxDecoration(
+                  color: emoji == selected ? color : ns.paper,
+                  border: Sticker.thinOutline(ns.ink),
+                  borderRadius: BorderRadius.circular(14),
+                  boxShadow: emoji == selected
+                      ? Sticker.shadow(ns.ink, const Offset(3, 3))
+                      : null,
+                ),
+                child: Text(emoji, style: AppType.glyph(24)),
               ),
-              child: Text(emoji, style: AppType.glyph(24)),
             ),
           ),
       ],
@@ -237,21 +239,30 @@ class ColorPicker extends StatelessWidget {
       runSpacing: 12,
       children: [
         for (var i = 0; i < ns.crayons.length; i++)
-          GestureDetector(
-            onTap: () => onSelected(i),
-            child: Container(
-              width: 40,
-              height: 40,
-              decoration: BoxDecoration(
-                color: ns.crayons[i],
-                border: Border.all(
-                  color: ns.ink,
-                  width: i == selected ? 4 : Sticker.thinBorder,
+          Semantics(
+            button: true,
+            selected: i == selected,
+            label: 'Colour ${i + 1}',
+            child: GestureDetector(
+              onTap: () => onSelected(i),
+              child: Container(
+                padding: EdgeInsets.only(
+                  left: i == selected ? 2 : 5,
+                  right: i == selected ? 2 : 5,
                 ),
-                shape: BoxShape.circle,
-                boxShadow: i == selected
-                    ? Sticker.shadow(ns.ink, const Offset(3, 3))
-                    : null,
+                width: 40,
+                height: 40,
+                decoration: BoxDecoration(
+                  color: ns.crayons[i],
+                  border: Border.all(
+                    color: ns.ink,
+                    width: i == selected ? 4 : Sticker.thinBorder,
+                  ),
+                  shape: BoxShape.circle,
+                  boxShadow: i == selected
+                      ? Sticker.shadow(ns.ink, const Offset(3, 3))
+                      : null,
+                ),
               ),
             ),
           ),

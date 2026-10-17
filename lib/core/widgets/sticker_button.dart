@@ -62,38 +62,45 @@ class _StickerButtonState extends State<StickerButton> {
         onTapUp: _enabled ? (_) => setState(() => _down = false) : null,
         onTapCancel: _enabled ? () => setState(() => _down = false) : null,
         onTap: widget.onPressed,
-        child: AnimatedContainer(
-          duration: MediaQuery.disableAnimationsOf(context)
-              ? Duration.zero
-              : const Duration(milliseconds: 120),
-          curve: Curves.easeOut,
-          transform: Matrix4.translationValues(
-            pressed && !MediaQuery.disableAnimationsOf(context) ? travel.dx : 0,
-            pressed && !MediaQuery.disableAnimationsOf(context) ? travel.dy : 0,
-            0,
-          ),
-          padding: widget.padding,
-          decoration: BoxDecoration(
-            color: _enabled ? fill : ns.tint,
-            border: widget.thin
-                ? Sticker.thinOutline(ns.ink)
-                : Sticker.outline(ns.ink),
-            borderRadius: BorderRadius.circular(widget.radius),
-            boxShadow: Sticker.shadow(ns.ink, offset),
-          ),
-          child: DefaultTextStyle.merge(
-            textAlign: TextAlign.center,
-            style: AppType.buttonLarge.copyWith(
-              color: _enabled ? ink : ns.muted,
+        child: ConstrainedBox(
+          constraints: const BoxConstraints(minWidth: 48, minHeight: 48),
+          child: AnimatedContainer(
+            duration: MediaQuery.disableAnimationsOf(context)
+                ? Duration.zero
+                : const Duration(milliseconds: 120),
+            curve: Curves.easeOut,
+            transform: Matrix4.translationValues(
+              pressed && !MediaQuery.disableAnimationsOf(context)
+                  ? travel.dx
+                  : 0,
+              pressed && !MediaQuery.disableAnimationsOf(context)
+                  ? travel.dy
+                  : 0,
+              0,
             ),
-            child: IconTheme(
-              data: IconThemeData(color: _enabled ? ink : ns.muted, size: 20),
-              child: widget.expand
-                  ? Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [Flexible(child: widget.child)],
-                    )
-                  : widget.child,
+            padding: widget.padding,
+            decoration: BoxDecoration(
+              color: _enabled ? fill : ns.tint,
+              border: widget.thin
+                  ? Sticker.thinOutline(ns.ink)
+                  : Sticker.outline(ns.ink),
+              borderRadius: BorderRadius.circular(widget.radius),
+              boxShadow: Sticker.shadow(ns.ink, offset),
+            ),
+            child: DefaultTextStyle.merge(
+              textAlign: TextAlign.center,
+              style: AppType.buttonLarge.copyWith(
+                color: _enabled ? ink : ns.muted,
+              ),
+              child: IconTheme(
+                data: IconThemeData(color: _enabled ? ink : ns.muted, size: 20),
+                child: widget.expand
+                    ? Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [Flexible(child: widget.child)],
+                      )
+                    : widget.child,
+              ),
             ),
           ),
         ),

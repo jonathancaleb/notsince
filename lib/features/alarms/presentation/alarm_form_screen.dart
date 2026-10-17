@@ -225,22 +225,35 @@ class _DayPicker extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
         for (var day = DateTime.monday; day <= DateTime.sunday; day++)
-          GestureDetector(
-            onTap: () => onToggle(day),
-            child: Container(
-              width: 42,
-              height: 42,
-              alignment: Alignment.center,
-              decoration: BoxDecoration(
-                color: selected.contains(day)
-                    ? ns.alarm
-                    : ns.paper,
-                border: Sticker.thinOutline(ns.ink),
-                shape: BoxShape.circle,
-              ),
-              child: Text(
-                names[day - 1],
-                style: AppType.midLabel,
+          Semantics(
+            button: true,
+            selected: selected.contains(day),
+            label: 'Every ${const [
+              'Monday',
+              'Tuesday',
+              'Wednesday',
+              'Thursday',
+              'Friday',
+              'Saturday',
+              'Sunday',
+            ][day - 1]}',
+            child: GestureDetector(
+              onTap: () => onToggle(day),
+              child: Container(
+                width: 42,
+                height: 42,
+                alignment: Alignment.center,
+                decoration: BoxDecoration(
+                  color: selected.contains(day)
+                      ? ns.alarm
+                      : ns.paper,
+                  border: Sticker.thinOutline(ns.ink),
+                  shape: BoxShape.circle,
+                ),
+                child: Text(
+                  names[day - 1],
+                  style: AppType.midLabel,
+                ),
               ),
             ),
           ),
@@ -315,17 +328,23 @@ class _Chip extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final ns = context.ns;
-    return GestureDetector(
-      onTap: onTap,
-      child: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
-        decoration: BoxDecoration(
-          color: isSelected ? color : ns.paper,
-          border: Sticker.thinOutline(ns.ink),
-          borderRadius: BorderRadius.circular(Sticker.tinyRadius),
-          boxShadow: isSelected ? Sticker.shadow(ns.ink, const Offset(3, 3)) : null,
+    return Semantics(
+      button: true,
+      selected: isSelected,
+      child: GestureDetector(
+        onTap: onTap,
+        child: Container(
+          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+          decoration: BoxDecoration(
+            color: isSelected ? color : ns.paper,
+            border: Sticker.thinOutline(ns.ink),
+            borderRadius: BorderRadius.circular(Sticker.tinyRadius),
+            boxShadow: isSelected
+                ? Sticker.shadow(ns.ink, const Offset(3, 3))
+                : null,
+          ),
+          child: Text(label, style: AppType.midLabel),
         ),
-        child: Text(label, style: AppType.midLabel),
       ),
     );
   }
