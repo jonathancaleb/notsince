@@ -12,7 +12,7 @@ import 'package:notsince/features/counter/presentation/widgets/counter_page.dart
 import 'package:notsince/features/planner/data/planner_store.dart';
 import 'package:notsince/features/planner/domain/models.dart';
 import 'package:notsince/features/planner/presentation/planner_screen.dart';
-import 'package:notsince/theme/app_colors.dart';
+import 'package:notsince/core/theme/app_colors.dart';
 import 'package:notsince/widgets/habit_circle.dart';
 import 'package:notsince/widgets/soft_card.dart';
 

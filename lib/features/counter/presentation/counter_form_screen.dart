@@ -1,5 +1,5 @@
 import 'package:notsince/features/planner/data/planner_store.dart';
-import 'package:notsince/theme/app_colors.dart';
+import 'package:notsince/core/theme/app_colors.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:notsince/features/counter/application/tracker_controller.dart';

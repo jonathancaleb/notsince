@@ -4,7 +4,7 @@ import 'package:notsince/core/prefs/app_prefs.dart';
 import 'package:notsince/features/garden/growth_engine.dart';
 import 'package:notsince/features/garden/presentation/garden_screen.dart';
 import 'package:notsince/features/planner/data/planner_store.dart';
-import 'package:notsince/theme/app_colors.dart';
+import 'package:notsince/core/theme/app_colors.dart';
 import 'package:notsince/widgets/primary_button.dart';
 
 class WarmOnboardingScreen extends ConsumerStatefulWidget {

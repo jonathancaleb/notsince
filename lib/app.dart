@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:notsince/core/prefs/app_prefs.dart';
-import 'package:notsince/theme/app_theme.dart';
+import 'package:notsince/core/theme/app_theme.dart';
 import 'package:notsince/features/counter/application/tracker_controller.dart';
 import 'package:notsince/features/counter/presentation/counter_form_screen.dart';
 import 'package:notsince/features/onboarding/presentation/warm_onboarding_screen.dart';

@@ -3,6 +3,17 @@ import 'package:notsince/core/theme/app_type.dart';
 import 'package:notsince/core/theme/ns_colors.dart';
 import 'package:notsince/core/theme/sticker.dart';
 
+import 'app_colors.dart';
+
+import 'app_spacing.dart';
+
+/// The source-of-truth theme builder.
+///
+/// [buildLightTheme] / [buildDarkTheme] render the sticker look. [AppTheme]
+/// finishes that base with the user's chosen accent (the accent picker asks for
+/// an integer from [AppColors.palette] before a theme exists, so custom accents
+/// arrive as raw argb) and re-balances type + button shapes on top.
+
 ThemeData buildLightTheme() => _theme(NsColors.light, Brightness.light);
 
 ThemeData buildDarkTheme() => _theme(NsColors.dark, Brightness.dark);
@@ -138,3 +149,61 @@ OutlineInputBorder _fieldBorder(Color ink, double width) => OutlineInputBorder(
   borderRadius: BorderRadius.circular(Sticker.smallRadius),
   borderSide: BorderSide(color: ink, width: width),
 );
+
+/// The finished themes the app actually runs with: the sticker base plus the
+/// user's accent, with the accent lifted in dark mode so habit rings keep their
+/// presence on charcoal.
+abstract final class AppTheme {
+  static ThemeData get light => _finish(buildLightTheme());
+  static ThemeData get dark => _finish(buildDarkTheme());
+  static ThemeData lightWithAccent(int accent) =>
+      _finish(buildLightTheme(), accent: accent);
+  static ThemeData darkWithAccent(int accent) =>
+      _finish(buildDarkTheme(), accent: accent);
+
+  static ThemeData _finish(ThemeData base, {int? accent}) {
+    final color = AppColors.lifted(
+      accent ?? AppColors.accent.toARGB32(),
+      base.brightness,
+    );
+    final scheme = base.colorScheme.copyWith(
+      primary: color,
+      secondary: color,
+      onPrimary: color.computeLuminance() > .18
+          ? AppColors.darkBg
+          : Colors.white,
+      surface: base.brightness == Brightness.dark
+          ? AppColors.darkSurface
+          : AppColors.surface,
+    );
+    return base.copyWith(
+      colorScheme: scheme,
+      extensions: [
+        base.extension<NsColors>()!.copyWith(
+          primary: color,
+          accent: color,
+          onInk: scheme.onPrimary,
+        ),
+      ],
+      textTheme: base.textTheme
+          .copyWith(
+            displaySmall: AppType.displayLarge,
+            titleLarge: AppType.cardTitle,
+            bodyLarge: AppType.paragraph,
+            bodyMedium: AppType.paragraph,
+            labelSmall: AppType.caption,
+          )
+          .apply(bodyColor: scheme.onSurface, displayColor: scheme.onSurface),
+      filledButtonTheme: FilledButtonThemeData(
+        style: FilledButton.styleFrom(
+          minimumSize: const Size(48, 52),
+          shape: const StadiumBorder(),
+        ),
+      ),
+      chipTheme: base.chipTheme.copyWith(
+        shape: const StadiumBorder(),
+        side: BorderSide(color: scheme.outlineVariant),
+      ),
+    );
+  }
+}

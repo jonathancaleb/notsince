@@ -9,7 +9,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:notsince/core/prefs/app_prefs.dart';
-import 'package:notsince/theme/app_theme.dart';
+import 'package:notsince/core/theme/app_theme.dart';
 import 'package:notsince/features/planner/data/planner_store.dart';
 import 'package:notsince/features/planner/domain/models.dart';
 import 'package:notsince/core/time/clock.dart';

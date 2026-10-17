@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:notsince/core/time/clock.dart';
 import 'package:notsince/core/time/ticker.dart';
-import 'package:notsince/theme/app_colors.dart';
+import 'package:notsince/core/theme/app_colors.dart';
 import 'package:notsince/widgets/soft_card.dart';
 import 'package:notsince/features/notes/application/notes_controller.dart';
 import 'package:notsince/features/notes/presentation/note_editor_screen.dart';

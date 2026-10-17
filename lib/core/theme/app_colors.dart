@@ -1,5 +1,13 @@
 import 'package:flutter/material.dart';
 
+/// Habit-level colours that live outside the theme's [NsColors].
+///
+/// The crayon palette is duplicated in [NsColors] (theme-sized, lerped across
+/// light/dark); this holds the same list flat, for screens that pick an accent
+/// before a theme exists — onboarding's accent picker, the habit form.
+///
+/// `bg`, `ink` and friends mirror `NsColors.light`/`NsColors.dark`; they are
+/// read where no `BuildContext` exists (alarm tinting on the schedule).
 abstract final class AppColors {
   static const bg = Color(0xFFFAF7F0);
   static const surface = Color(0xFFFFFDF8);

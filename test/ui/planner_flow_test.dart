@@ -21,7 +21,7 @@ import 'package:notsince/features/onboarding/presentation/warm_onboarding_screen
 import 'package:notsince/features/planner/data/planner_store.dart';
 import 'package:notsince/features/planner/presentation/notes_hub_screen.dart';
 import 'package:notsince/features/shell/home_shell.dart';
-import 'package:notsince/theme/app_theme.dart';
+import 'package:notsince/core/theme/app_theme.dart';
 import 'package:notsince/widgets/habit_circle.dart';
 
 import '../support/fakes.dart';

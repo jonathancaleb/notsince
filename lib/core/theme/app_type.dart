@@ -17,6 +17,14 @@ abstract final class AppType {
   static const display = 'Baloo2';
   static const body = 'Quicksand';
 
+  /// Largest spoken style: dashboards and the onboarding welcome. The theme's
+  /// `displaySmall` maps to it.
+  static const displayLarge = TextStyle(
+    fontFamily: display,
+    fontSize: 28,
+    fontWeight: FontWeight.w700,
+  );
+
   /// The day count. Sized by the caller; this only fixes its character.
   static TextStyle counter(double size) => TextStyle(
     fontFamily: display,
@@ -66,6 +74,23 @@ abstract final class AppType {
     fontSize: 16,
     fontWeight: FontWeight.w700,
     height: 1.2,
+  );
+
+  /// Body copy for reading paragraphs — like [bodyText] but quieter (no
+  /// explicit weight) and slightly looser. The theme's `bodyLarge` and
+  /// `bodyMedium` map to it, so unstyled `Text` picks it up.
+  static const paragraph = TextStyle(
+    fontFamily: body,
+    fontSize: 16,
+    height: 1.5,
+  );
+
+  /// Small caption — like [small] but at weight 400. The theme's `labelSmall`
+  /// maps to it.
+  static const caption = TextStyle(
+    fontFamily: body,
+    fontSize: 13,
+    height: 1.4,
   );
 
   /// Secondary text is a weight and a colour, not a different face.

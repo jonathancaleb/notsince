@@ -15,7 +15,7 @@ import 'package:notsince/features/planner/presentation/notes_hub_screen.dart';
 import 'package:notsince/features/planner/presentation/reports_screen.dart';
 import 'package:notsince/features/garden/presentation/garden_screen.dart';
 import 'package:notsince/features/planner/data/planner_store.dart';
-import 'package:notsince/theme/app_colors.dart';
+import 'package:notsince/core/theme/app_colors.dart';
 
 enum HomeTab { home, habit, alarms, notes, planner, garden, insights }
 
