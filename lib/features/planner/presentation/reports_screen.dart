@@ -4,7 +4,7 @@ import 'package:notsince/core/time/clock.dart';
 import 'package:notsince/core/time/ticker.dart';
 import 'package:notsince/features/counter/application/tracker_controller.dart';
 import 'package:notsince/features/garden/growth_engine.dart';
-import 'package:notsince/widgets/soft_card.dart';
+import 'package:notsince/core/widgets/soft_card.dart';
 
 import '../data/planner_store.dart';
 import '../domain/models.dart';

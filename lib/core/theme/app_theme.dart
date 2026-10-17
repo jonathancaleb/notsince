@@ -5,8 +5,6 @@ import 'package:notsince/core/theme/sticker.dart';
 
 import 'app_colors.dart';
 
-import 'app_spacing.dart';
-
 /// The source-of-truth theme builder.
 ///
 /// [buildLightTheme] / [buildDarkTheme] render the sticker look. [AppTheme]

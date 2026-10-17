@@ -5,7 +5,7 @@ import 'package:notsince/core/ids.dart';
 import 'package:notsince/core/time/clock.dart';
 import 'package:notsince/features/counter/application/tracker_controller.dart';
 import 'package:notsince/features/notes/presentation/notes_screen.dart';
-import 'package:notsince/widgets/soft_card.dart';
+import 'package:notsince/core/widgets/soft_card.dart';
 
 import '../data/planner_store.dart';
 import '../domain/models.dart';

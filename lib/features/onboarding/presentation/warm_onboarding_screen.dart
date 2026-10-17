@@ -5,7 +5,7 @@ import 'package:notsince/features/garden/growth_engine.dart';
 import 'package:notsince/features/garden/presentation/garden_screen.dart';
 import 'package:notsince/features/planner/data/planner_store.dart';
 import 'package:notsince/core/theme/app_colors.dart';
-import 'package:notsince/widgets/primary_button.dart';
+import 'package:notsince/core/widgets/primary_button.dart';
 
 class WarmOnboardingScreen extends ConsumerStatefulWidget {
   const WarmOnboardingScreen({super.key, required this.onDone});

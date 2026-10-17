@@ -8,7 +8,7 @@ import 'package:notsince/features/counter/presentation/counter_form_screen.dart'
 import 'package:notsince/features/counter/presentation/counter_screen.dart';
 import 'package:notsince/features/garden/presentation/garden_screen.dart';
 import 'package:notsince/features/settings/presentation/app_settings_screen.dart';
-import 'package:notsince/widgets/habit_circle.dart';
+import 'package:notsince/core/widgets/habit_circle.dart';
 
 import '../data/planner_store.dart';
 import '../domain/models.dart';
