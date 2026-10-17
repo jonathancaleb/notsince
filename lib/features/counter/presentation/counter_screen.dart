@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:notsince/core/theme/app_type.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:notsince/features/counter/application/tracker_controller.dart';
 import 'package:notsince/core/theme/ns_colors.dart';
@@ -130,11 +131,7 @@ class _NoCounters extends StatelessWidget {
               const SizedBox(height: 16),
               Text(
                 'Nothing is being counted yet.',
-                style: TextStyle(
-                  fontSize: 18,
-                  fontWeight: FontWeight.w500,
-                  color: ns.muted,
-                ),
+                style: AppType.softTitle.copyWith(color: ns.muted),
               ),
               const SizedBox(height: 28),
               StickerButton(

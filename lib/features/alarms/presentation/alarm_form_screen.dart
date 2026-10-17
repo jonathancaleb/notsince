@@ -240,7 +240,7 @@ class _DayPicker extends StatelessWidget {
               ),
               child: Text(
                 names[day - 1],
-                style: AppType.label.copyWith(fontSize: 15),
+                style: AppType.midLabel,
               ),
             ),
           ),
@@ -325,7 +325,7 @@ class _Chip extends StatelessWidget {
           borderRadius: BorderRadius.circular(Sticker.tinyRadius),
           boxShadow: isSelected ? Sticker.shadow(ns.ink, const Offset(3, 3)) : null,
         ),
-        child: Text(label, style: AppType.label.copyWith(fontSize: 15)),
+        child: Text(label, style: AppType.midLabel),
       ),
     );
   }

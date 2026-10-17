@@ -1,6 +1,7 @@
 import 'package:notsince/features/planner/data/planner_store.dart';
 import 'package:notsince/core/theme/app_colors.dart';
 import 'package:flutter/material.dart';
+import 'package:notsince/core/theme/app_type.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:notsince/features/counter/application/tracker_controller.dart';
 import 'package:notsince/core/theme/ns_colors.dart';
@@ -113,11 +114,7 @@ class _CounterFormScreenState extends ConsumerState<CounterFormScreen> {
                     controller: _name,
                     autofocus: true,
                     textCapitalization: TextCapitalization.sentences,
-                    style: TextStyle(
-                      fontSize: 17,
-                      fontWeight: FontWeight.w500,
-                      color: ns.ink,
-                    ),
+                    style: AppType.lead.copyWith(color: ns.ink),
                     decoration: const InputDecoration(hintText: 'Drinking'),
                     onChanged: (_) => setState(() {}),
                     onSubmitted: (_) {
@@ -171,11 +168,7 @@ class _Label extends StatelessWidget {
     final ns = context.ns;
     return Text(
       text,
-      style: TextStyle(
-        fontSize: 17,
-        fontWeight: FontWeight.w600,
-        color: ns.ink,
-      ),
+      style: AppType.subhead.copyWith(color: ns.ink),
     );
   }
 }
@@ -216,7 +209,7 @@ class IconPicker extends StatelessWidget {
                     ? Sticker.shadow(ns.ink, const Offset(3, 3))
                     : null,
               ),
-              child: Text(emoji, style: const TextStyle(fontSize: 24)),
+              child: Text(emoji, style: AppType.glyph(24)),
             ),
           ),
       ],
@@ -291,11 +284,7 @@ class StartTimeCard extends StatelessWidget {
             Expanded(
               child: Text(
                 dateTimeLabel(startedAt),
-                style: TextStyle(
-                  fontSize: 16,
-                  fontWeight: FontWeight.w500,
-                  color: ns.ink,
-                ),
+                style: AppType.bodyText.copyWith(color: ns.ink),
               ),
             ),
             Icon(Icons.edit_calendar_rounded, size: 20, color: ns.ink),

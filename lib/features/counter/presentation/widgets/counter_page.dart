@@ -18,8 +18,8 @@ import 'package:notsince/core/widgets/habit_plant.dart';
 
 /// One counter, full screen.
 ///
-/// The whole page is built around a single number. Everything else — icon,
-/// name, progress, actions — is sized to stay clearly subordinate to it, so
+/// The whole page is built around a single number. Everything else â€” icon,
+/// name, progress, actions â€” is sized to stay clearly subordinate to it, so
 /// there is never any question about what the screen is for.
 class CounterPage extends ConsumerWidget {
   const CounterPage({super.key, required this.id});
@@ -98,7 +98,7 @@ class _Heading extends StatelessWidget {
     final ns = context.ns;
     return Row(
       children: [
-        Text(emoji, style: const TextStyle(fontSize: 30)),
+        Text(emoji, style: AppType.glyph(30)),
         const SizedBox(width: 12),
         Expanded(
           child: Text(
@@ -166,7 +166,7 @@ class _BigCount extends ConsumerWidget {
         Text(
           habitEncouragement(progress.elapsed, hasHistory: hasHistory),
           textAlign: TextAlign.center,
-          style: AppType.bodyText.copyWith(fontSize: 14),
+          style: AppType.hint,
         ),
       ],
     );
@@ -217,8 +217,8 @@ class _Timeline extends ConsumerWidget {
 
     return Text(
       next == null
-          ? 'Fully grown · every milestone behind you'
-          : '${passed.length} of ${stops.length} · next ${milestoneLabel(next)}',
+          ? 'Fully grown Â· every milestone behind you'
+          : '${passed.length} of ${stops.length} Â· next ${milestoneLabel(next)}',
       textAlign: TextAlign.center,
       style: AppType.muted(ns),
     );

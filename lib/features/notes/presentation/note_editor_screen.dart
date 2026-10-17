@@ -12,7 +12,7 @@ import 'package:notsince/features/notes/presentation/notes_screen.dart';
 /// Writing happens on an island.
 ///
 /// The page is the note's colour, and the text sits on its own outlined card
-/// floating on top of it — so the thing you are writing is visibly a separate
+/// floating on top of it â€” so the thing you are writing is visibly a separate
 /// object from the app around it, rather than text loose on a background. The
 /// controls live outside the island, which keeps the writing surface clear.
 class NoteEditorScreen extends ConsumerStatefulWidget {
@@ -155,8 +155,7 @@ class _NoteEditorScreenState extends ConsumerState<NoteEditorScreen> {
                                 controller: _title,
                                 textCapitalization:
                                     TextCapitalization.sentences,
-                                style: AppType.cardTitle.copyWith(
-                                  fontSize: 24,
+                                style: AppType.editorTitle.copyWith(
                                   decoration: isDone
                                       ? TextDecoration.lineThrough
                                       : null,
@@ -171,8 +170,7 @@ class _NoteEditorScreenState extends ConsumerState<NoteEditorScreen> {
                                   enabledBorder: InputBorder.none,
                                   focusedBorder: InputBorder.none,
                                   contentPadding: EdgeInsets.zero,
-                                  hintStyle: AppType.cardTitle.copyWith(
-                                    fontSize: 24,
+                                  hintStyle: AppType.editorTitle.copyWith(
                                     color: ns.muted,
                                   ),
                                 ),
@@ -190,7 +188,7 @@ class _NoteEditorScreenState extends ConsumerState<NoteEditorScreen> {
                             expands: true,
                             textAlignVertical: TextAlignVertical.top,
                             textCapitalization: TextCapitalization.sentences,
-                            style: AppType.bodyText.copyWith(fontSize: 16),
+                            style: AppType.bodyText,
                             decoration: InputDecoration(
                               hintText: _isTask
                                   ? 'Any detail worth remembering'
@@ -200,8 +198,8 @@ class _NoteEditorScreenState extends ConsumerState<NoteEditorScreen> {
                               enabledBorder: InputBorder.none,
                               focusedBorder: InputBorder.none,
                               contentPadding: EdgeInsets.zero,
-                              hintStyle: AppType.muted(ns).copyWith(
-                                fontSize: 16,
+                              hintStyle: AppType.bodyText.copyWith(
+                                color: ns.muted,
                               ),
                             ),
                           ),
@@ -262,7 +260,7 @@ class _NoteEditorScreenState extends ConsumerState<NoteEditorScreen> {
   }
 }
 
-/// When a task is due. Absent until you set one — most tasks never need a time,
+/// When a task is due. Absent until you set one â€” most tasks never need a time,
 /// and an empty date field on every task would be noise.
 class _DueChip extends StatelessWidget {
   const _DueChip({
@@ -286,7 +284,7 @@ class _DueChip extends StatelessWidget {
       child: Container(
         padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
         decoration: BoxDecoration(
-          // Overdue is marked by weight, not by red — a late task is still a
+          // Overdue is marked by weight, not by red â€” a late task is still a
           // task, not a failure.
           color: overdue ? ns.ink : ns.paper,
           border: Sticker.thinOutline(ns.ink),
@@ -300,8 +298,7 @@ class _DueChip extends StatelessWidget {
             const SizedBox(width: 6),
             Text(
               dueAt == null ? 'Due' : dateTimeLabel(dueAt!),
-              style: AppType.label.copyWith(
-                fontSize: 13,
+              style: AppType.smallStrong.copyWith(
                 color: overdue ? ns.paper : ns.ink,
               ),
             ),
@@ -344,8 +341,7 @@ class _KindToggle extends StatelessWidget {
             const SizedBox(width: 6),
             Text(
               'Task',
-              style: AppType.label.copyWith(
-                fontSize: 14,
+              style: AppType.kicker.copyWith(
                 color: isTask ? ns.paper : ns.ink,
               ),
             ),

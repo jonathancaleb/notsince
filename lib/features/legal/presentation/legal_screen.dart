@@ -55,8 +55,8 @@ class LegalScreen extends StatelessWidget {
             color: ns.tint,
             padding: const EdgeInsets.all(16),
             child: Text(
-              '${AppInfo.name} ${AppInfo.version}  ·  ${AppInfo.packageId}',
-              style: AppType.muted(ns).copyWith(fontSize: 13),
+              '${AppInfo.name} ${AppInfo.version}  Â·  ${AppInfo.packageId}',
+              style: AppType.muted(ns),
             ),
           ),
         ],
@@ -76,21 +76,21 @@ class _Block extends StatelessWidget {
     final first = lines.first;
     final isHeading = lines.length > 1 &&
         !first.endsWith('.') &&
-        !first.startsWith('•') &&
+        !first.startsWith('â€¢') &&
         first.length < 60;
 
     if (!isHeading) {
-      return Text(text, style: AppType.bodyText.copyWith(fontSize: 15));
+      return Text(text, style: AppType.footnote);
     }
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(first, style: AppType.cardTitle.copyWith(fontSize: 18)),
+        Text(first, style: AppType.subtitle),
         const SizedBox(height: 6),
         Text(
           lines.skip(1).join('\n'),
-          style: AppType.bodyText.copyWith(fontSize: 15),
+          style: AppType.footnote,
         ),
       ],
     );

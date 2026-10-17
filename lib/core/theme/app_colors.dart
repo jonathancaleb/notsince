@@ -16,6 +16,13 @@ abstract final class AppColors {
   static const darkBg = Color(0xFF171513);
   static const darkSurface = Color(0xFF1E1C1A);
   static const darkInk = Color(0xFFF3EDE3);
+
+  /// The painted pot under a garden plant.
+  static const pot = Color(0xFFCB9876);
+
+  /// The painted centre of a garden bloom.
+  static const bloom = Color(0xFFF1CE6A);
+
   static const palette = <int>[
     0xFF639922,
     0xFFE8B33D,

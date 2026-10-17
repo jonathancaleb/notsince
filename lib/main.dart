@@ -5,6 +5,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:hive_ce_flutter/hive_flutter.dart';
 import 'package:notsince/app.dart';
+import 'package:notsince/core/theme/app_spacing.dart';
+import 'package:notsince/core/theme/app_type.dart';
 import 'package:notsince/features/planner/data/planner_store.dart';
 import 'package:notsince/core/hive/hive_registrar.g.dart';
 import 'package:notsince/core/prefs/app_prefs.dart';
@@ -133,14 +135,14 @@ class _StorageFailureApp extends StatelessWidget {
       home: Scaffold(
         body: Center(
           child: Padding(
-            padding: const EdgeInsets.all(32),
+            padding: const EdgeInsets.all(AppSpacing.lg),
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
                 const Text(
                   'notsince could not open your data.',
                   textAlign: TextAlign.center,
-                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.w700),
+                  style: AppType.heading,
                 ),
                 const SizedBox(height: 12),
                 Text(
@@ -148,7 +150,9 @@ class _StorageFailureApp extends StatelessWidget {
                   'happening, reinstalling will clear the stored data and '
                   'start the count again.',
                   textAlign: TextAlign.center,
-                  style: TextStyle(fontSize: 15, color: Colors.black.withValues(alpha: 0.6)),
+                  style: AppType.plain.copyWith(
+                    color: Colors.black.withValues(alpha: 0.6),
+                  ),
                 ),
               ],
             ),

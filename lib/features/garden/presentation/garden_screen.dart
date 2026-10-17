@@ -13,6 +13,7 @@ import 'package:notsince/features/planner/data/planner_store.dart';
 import 'package:notsince/features/planner/domain/models.dart';
 import 'package:notsince/features/planner/presentation/planner_screen.dart';
 import 'package:notsince/core/theme/app_colors.dart';
+import 'package:notsince/core/theme/app_spacing.dart';
 import 'package:notsince/core/widgets/habit_circle.dart';
 import 'package:notsince/core/widgets/soft_card.dart';
 
@@ -89,13 +90,13 @@ class GardenScreen extends ConsumerWidget {
           const Text(
             'Small care. Beautiful growth.\nRest days never erase what you’ve grown.',
           ),
-          const SizedBox(height: 24),
+          const SizedBox(height: AppSpacing.md),
           if (trackers.isEmpty)
             SoftCard(
               child: Column(
                 children: [
                   const Text('Your first seed is waiting.'),
-                  const SizedBox(height: 16),
+                  const SizedBox(height: AppSpacing.sm),
                   FilledButton(
                     onPressed: () => CounterFormScreen.create(context),
                     child: const Text('Plant a habit'),
@@ -105,8 +106,8 @@ class GardenScreen extends ConsumerWidget {
             ),
           LayoutBuilder(
             builder: (context, constraints) => Wrap(
-              spacing: 16,
-              runSpacing: 16,
+              spacing: AppSpacing.sm,
+              runSpacing: AppSpacing.sm,
               children: [
                 for (final tracker in trackers)
                   SizedBox(
@@ -121,7 +122,7 @@ class GardenScreen extends ConsumerWidget {
                           plantedAt: tracker.startedAt,
                         );
                         return SoftCard(
-                          padding: const EdgeInsets.all(16),
+                          padding: const EdgeInsets.all(AppSpacing.sm),
                           child: Column(
                             children: [
                               HabitCircle(
@@ -153,7 +154,7 @@ class GardenScreen extends ConsumerWidget {
                                   ),
                                 ),
                               ),
-                              const SizedBox(height: 8),
+                              const SizedBox(height: AppSpacing.xs),
                               Text(
                                 growth.wilted
                                     ? 'A little water, a little patience'
@@ -219,7 +220,7 @@ class _PlantPainter extends CustomPainter {
         Rect.fromLTWH(cx - 22, 90, 44, 24),
         const Radius.circular(8),
       ),
-      Paint()..color = const Color(0xFFCB9876),
+      Paint()..color = AppColors.pot,
     );
     if (stage == GrowthStage.seed) {
       canvas.drawOval(
@@ -266,7 +267,7 @@ class _PlantPainter extends CustomPainter {
       canvas.drawCircle(
         Offset(cx, top),
         7,
-        Paint()..color = const Color(0xFFF1CE6A),
+        Paint()..color = AppColors.bloom,
       );
     }
   }
@@ -300,7 +301,7 @@ class PlantDetailScreen extends ConsumerWidget {
     return Scaffold(
       appBar: AppBar(title: Text(tracker.name)),
       body: ListView(
-        padding: const EdgeInsets.all(24),
+        padding: const EdgeInsets.all(AppSpacing.md),
         children: [
           Center(
             child: PlantIllustration(
@@ -318,7 +319,7 @@ class PlantDetailScreen extends ConsumerWidget {
               '${growth.recovery}/3 consecutive check-ins toward recovery',
               textAlign: TextAlign.center,
             ),
-          const SizedBox(height: 24),
+          const SizedBox(height: AppSpacing.md),
           Center(
             child: HabitCircle(
               label: 'Long press to water',
@@ -328,10 +329,10 @@ class PlantDetailScreen extends ConsumerWidget {
               onCheckIn: () => waterHabit(context, ref, tracker),
             ),
           ),
-          const SizedBox(height: 24),
+          const SizedBox(height: AppSpacing.md),
           Text('$progress / $goal today'),
           LinearProgressIndicator(value: (progress / goal).clamp(0, 1)),
-          const SizedBox(height: 16),
+          const SizedBox(height: AppSpacing.sm),
           FilledButton(
             onPressed: () => waterHabit(context, ref, tracker),
             child: const Text('Add 1 to today’s goal'),
@@ -364,7 +365,7 @@ class PlantDetailScreen extends ConsumerWidget {
                 ),
             ],
           ),
-          const SizedBox(height: 24),
+          const SizedBox(height: AppSpacing.md),
           const Text('Your original counter & history'),
           CounterPage(id: id),
         ],
@@ -451,7 +452,7 @@ class _BloomCelebration extends StatelessWidget {
     child: SafeArea(
       child: Center(
         child: Padding(
-          padding: const EdgeInsets.all(32),
+          padding: const EdgeInsets.all(AppSpacing.lg),
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
@@ -477,7 +478,7 @@ class _BloomCelebration extends StatelessWidget {
                 textAlign: TextAlign.center,
               ),
               Text('Hello, ${stage.name}.'),
-              const SizedBox(height: 24),
+              const SizedBox(height: AppSpacing.md),
               FilledButton(
                 onPressed: () => Navigator.pop(context),
                 child: const Text('Keep growing'),

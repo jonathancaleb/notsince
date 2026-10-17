@@ -2,6 +2,7 @@ import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
+import 'package:notsince/core/theme/app_type.dart';
 
 class HabitCircle extends StatefulWidget {
   const HabitCircle({
@@ -102,7 +103,7 @@ class _HabitCircleState extends State<HabitCircle>
                           widget.child ??
                               Text(
                                 widget.emoji,
-                                style: const TextStyle(fontSize: 32),
+                                style: AppType.glyph(32),
                               ),
                           if (t > 0 &&
                               t < 1 &&

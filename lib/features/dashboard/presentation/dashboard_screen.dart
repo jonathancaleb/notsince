@@ -24,7 +24,7 @@ import 'package:notsince/features/shell/home_shell.dart';
 
 /// Home. One screen that answers "how am I doing" for all three domains.
 ///
-/// It owns no state — everything here is a derived provider from counter,
+/// It owns no state â€” everything here is a derived provider from counter,
 /// alarms or notes. The count keeps the whole top of the screen because it is
 /// still what the app is for; the alarm and notes are glanceable summaries that
 /// hand off to their own tabs rather than trying to be usable in miniature.
@@ -79,7 +79,7 @@ String _dateLabel(DateTime dt) {
 ///
 /// The date used to be grey small print next to a grey gear. Both are now
 /// objects: the date is a tinted sticker chip that says what day it is in
-/// words, and settings is a proper outlined button rather than a bare icon —
+/// words, and settings is a proper outlined button rather than a bare icon â€”
 /// so the header has the same physical language as everything under it.
 class _Header extends ConsumerWidget {
   const _Header();
@@ -141,7 +141,7 @@ class _Header extends ConsumerWidget {
               const SizedBox(width: 8),
               Text(
                 _dateLabel(now),
-                style: AppType.label.copyWith(fontSize: 14),
+                style: AppType.kicker,
               ),
             ],
           ),
@@ -203,7 +203,7 @@ class _CountHero extends ConsumerWidget {
           children: [
             Row(
               children: [
-                Text(tracker.emoji, style: const TextStyle(fontSize: 26)),
+                Text(tracker.emoji, style: AppType.glyph(26)),
                 const SizedBox(width: 10),
                 Expanded(
                   child: Text(
@@ -220,7 +220,7 @@ class _CountHero extends ConsumerWidget {
               habitEncouragement(progress.elapsed,
                   hasHistory: tracker.history.isNotEmpty),
               textAlign: TextAlign.center,
-              style: AppType.bodyText.copyWith(fontSize: 14),
+              style: AppType.hint,
             ),
             const SizedBox(height: 12),
             Row(
@@ -244,14 +244,14 @@ class _CountHero extends ConsumerWidget {
                       ),
                       Text(
                         days == 1 ? 'day' : 'days',
-                        style: AppType.cardTitle.copyWith(fontSize: 18),
+                        style: AppType.subtitle,
                       ),
                       const SizedBox(height: 6),
                       Text(
                         next == null
                             ? 'Fully grown'
-                            : '$passedCount of ${tracker.sortedMilestones.length} · next ${milestoneLabel(next)}',
-                        style: AppType.muted(ns).copyWith(fontSize: 13),
+                            : '$passedCount of ${tracker.sortedMilestones.length} Â· next ${milestoneLabel(next)}',
+                        style: AppType.muted(ns),
                       ),
                     ],
                   ),
@@ -282,13 +282,13 @@ class _NextAlarmCard extends ConsumerWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const Text('🔔', style: TextStyle(fontSize: 20)),
+            Text('ðŸ””', style: AppType.glyph(20)),
             const SizedBox(height: 8),
             Text(
               next == null
                   ? 'None set'
                   : clockLabel(next.entry.hour, next.entry.minute),
-              style: AppType.clock.copyWith(fontSize: next == null ? 22 : 32),
+              style: next == null ? AppType.statSmall : AppType.stat,
             ),
             const SizedBox(height: 2),
             Text(
@@ -324,9 +324,9 @@ class _NotesCard extends ConsumerWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(openTasks > 0 ? '☑' : '📝', style: const TextStyle(fontSize: 20)),
+            Text(openTasks > 0 ? 'â˜‘' : 'ðŸ“', style: AppType.glyph(20)),
             const SizedBox(height: 8),
-            Text('${notes.length}', style: AppType.clock.copyWith(fontSize: 32)),
+            Text('${notes.length}', style: AppType.stat),
             const SizedBox(height: 2),
             Text(
               notes.isEmpty
@@ -352,7 +352,7 @@ String _ago(Duration d) {
   return 'just now';
 }
 
-/// Recent notes as a sideways strip of stickers. Reading only — tapping one
+/// Recent notes as a sideways strip of stickers. Reading only â€” tapping one
 /// opens it in the editor.
 class _NotesStrip extends ConsumerWidget {
   const _NotesStrip();
@@ -396,14 +396,14 @@ class _NotesStrip extends ConsumerWidget {
                             note.displayTitle,
                             maxLines: 2,
                             overflow: TextOverflow.ellipsis,
-                            style: AppType.cardTitle.copyWith(fontSize: 16),
+                            style: AppType.cardSmall,
                           ),
                           const SizedBox(height: 6),
                           Expanded(
                             child: Text(
                               note.body,
                               overflow: TextOverflow.fade,
-                              style: AppType.bodyText.copyWith(fontSize: 13),
+                              style: AppType.small,
                             ),
                           ),
                         ],

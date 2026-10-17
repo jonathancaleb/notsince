@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:notsince/core/theme/app_type.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:notsince/features/counter/application/progress_provider.dart';
 import 'package:notsince/features/counter/application/tracker_controller.dart';
@@ -43,16 +44,12 @@ class ResetConfirmSheet extends ConsumerWidget {
           children: [
             Row(
               children: [
-                Text(tracker.emoji, style: const TextStyle(fontSize: 26)),
+                Text(tracker.emoji, style: AppType.glyph(26)),
                 const SizedBox(width: 10),
                 Expanded(
                   child: Text(
                     'Start a new count?',
-                    style: TextStyle(
-                      fontSize: 23,
-                      fontWeight: FontWeight.w600,
-                      color: ns.ink,
-                    ),
+                    style: AppType.sheetTitle.copyWith(color: ns.ink),
                   ),
                 ),
               ],
@@ -61,12 +58,7 @@ class ResetConfirmSheet extends ConsumerWidget {
             Text(
               'Your current count of ${runLength(elapsed)} moves into your '
               'history, and a new one begins from now.',
-              style: TextStyle(
-                fontSize: 16,
-                height: 1.45,
-                fontWeight: FontWeight.w500,
-                color: ns.muted,
-              ),
+              style: AppType.bodyText.copyWith(color: ns.muted),
             ),
             const SizedBox(height: 28),
             StickerButton(

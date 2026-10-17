@@ -59,7 +59,7 @@ class AlarmRingScreen extends ConsumerWidget {
                   padding: const EdgeInsets.symmetric(vertical: 32),
                   child: Column(
                     children: [
-                      const Text('🔔', style: TextStyle(fontSize: 44)),
+                      Text('🔔', style: AppType.glyph(44)),
                       const SizedBox(height: 12),
                       FittedBox(
                         fit: BoxFit.scaleDown,

@@ -67,7 +67,7 @@ class CounterSettingsScreen extends ConsumerWidget {
         content: Text(
           '$name and its history are removed from this device. '
           'This cannot be undone.',
-          style: const TextStyle(fontSize: 15, height: 1.45),
+          style: AppType.footnote,
         ),
         actions: [
           TextButton(
@@ -221,11 +221,7 @@ class _Label extends StatelessWidget {
     final ns = context.ns;
     return Text(
       text,
-      style: TextStyle(
-        fontSize: 17,
-        fontWeight: FontWeight.w600,
-        color: ns.ink,
-      ),
+      style: AppType.subhead.copyWith(color: ns.ink),
     );
   }
 }
@@ -260,20 +256,12 @@ class SettingRow extends StatelessWidget {
                 children: [
                   Text(
                     label,
-                    style: TextStyle(
-                      fontSize: 14,
-                      fontWeight: FontWeight.w500,
-                      color: ns.muted,
-                    ),
+                    style: AppType.hint.copyWith(color: ns.muted),
                   ),
                   const SizedBox(height: 2),
                   Text(
                     value,
-                    style: TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.w500,
-                      color: ns.ink,
-                    ),
+                    style: AppType.bodyText.copyWith(color: ns.ink),
                   ),
                 ],
               ),

@@ -83,9 +83,8 @@ class _StickerButtonState extends State<StickerButton> {
           ),
           child: DefaultTextStyle.merge(
             textAlign: TextAlign.center,
-            style: AppType.button.copyWith(
+            style: AppType.buttonLarge.copyWith(
               color: _enabled ? ink : ns.muted,
-              fontSize: 17,
             ),
             child: IconTheme(
               data: IconThemeData(color: _enabled ? ink : ns.muted, size: 20),

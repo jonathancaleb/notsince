@@ -13,7 +13,7 @@ class NotesScreen extends ConsumerWidget {
   const NotesScreen({super.key});
 
   /// Asks which kind first, because a note and a task are different things to
-  /// sit down and write — not a setting you flip afterwards.
+  /// sit down and write â€” not a setting you flip afterwards.
   Future<void> _add(BuildContext context, WidgetRef ref) async {
     final isTask = await showModalBottomSheet<bool>(
       context: context,
@@ -108,7 +108,7 @@ class _KindSheet extends StatelessWidget {
               foreground: ns.ink,
               padding: const EdgeInsets.symmetric(vertical: 20),
               onPressed: () => Navigator.of(context).pop(false),
-              child: const Text('📝   Note'),
+              child: const Text('ðŸ“   Note'),
             ),
             const SizedBox(height: 12),
             StickerButton(
@@ -116,7 +116,7 @@ class _KindSheet extends StatelessWidget {
               foreground: ns.ink,
               padding: const EdgeInsets.symmetric(vertical: 20),
               onPressed: () => Navigator.of(context).pop(true),
-              child: const Text('☑   Task'),
+              child: const Text('â˜‘   Task'),
             ),
           ],
         ),
@@ -187,10 +187,10 @@ class _NoteCard extends ConsumerWidget {
                         note.displayTitle,
                         maxLines: 2,
                         overflow: TextOverflow.ellipsis,
-                        style: AppType.cardTitle.copyWith(
-                          fontSize: 16,
-                          decoration:
-                              done ? TextDecoration.lineThrough : null,
+                        style: AppType.cardSmall.copyWith(
+                          decoration: done
+                              ? TextDecoration.lineThrough
+                              : null,
                           decorationColor: ns.ink,
                           decorationThickness: 2,
                         ),
@@ -203,7 +203,7 @@ class _NoteCard extends ConsumerWidget {
                   child: Text(
                     note.body,
                     overflow: TextOverflow.fade,
-                    style: AppType.bodyText.copyWith(fontSize: 13),
+                    style: AppType.small,
                   ),
                 ),
               ],

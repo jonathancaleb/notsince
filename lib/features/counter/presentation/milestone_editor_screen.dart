@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:notsince/core/theme/app_type.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:notsince/features/counter/application/tracker_controller.dart';
@@ -35,12 +36,7 @@ class MilestoneEditorScreen extends ConsumerWidget {
           Text(
             'Points along the way worth marking. Change them to whatever '
             'suits what you are counting.',
-            style: TextStyle(
-              fontSize: 15,
-              height: 1.45,
-              fontWeight: FontWeight.w500,
-              color: ns.muted,
-            ),
+            style: AppType.footnote.copyWith(color: ns.muted),
           ),
           const SizedBox(height: 20),
           for (final milestone in milestones) ...[
@@ -53,11 +49,7 @@ class MilestoneEditorScreen extends ConsumerWidget {
                   Expanded(
                     child: Text(
                       milestoneLabel(milestone),
-                      style: TextStyle(
-                        fontSize: 17,
-                        fontWeight: FontWeight.w600,
-                        color: ns.ink,
-                      ),
+                      style: AppType.subhead.copyWith(color: ns.ink),
                     ),
                   ),
                   IconButton(
@@ -161,11 +153,7 @@ class _AddMilestoneDialogState extends State<_AddMilestoneDialog> {
               autofocus: true,
               keyboardType: TextInputType.number,
               inputFormatters: [FilteringTextInputFormatter.digitsOnly],
-              style: TextStyle(
-                fontSize: 17,
-                fontWeight: FontWeight.w500,
-                color: ns.ink,
-              ),
+              style: AppType.lead.copyWith(color: ns.ink),
               onChanged: (_) => setState(() {}),
             ),
           ),
@@ -173,11 +161,7 @@ class _AddMilestoneDialogState extends State<_AddMilestoneDialog> {
           Expanded(
             child: DropdownButtonFormField<_Unit>(
               initialValue: _unit,
-              style: TextStyle(
-                fontSize: 16,
-                fontWeight: FontWeight.w500,
-                color: ns.ink,
-              ),
+              style: AppType.bodyText.copyWith(color: ns.ink),
               items: [
                 for (final unit in _Unit.values)
                   DropdownMenuItem(value: unit, child: Text(unit.label)),

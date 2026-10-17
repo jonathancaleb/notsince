@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:notsince/core/theme/app_type.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:notsince/features/counter/application/milestone_provider.dart';
 import 'package:notsince/features/counter/application/tracker_controller.dart';
@@ -52,20 +53,12 @@ class MilestoneBanner extends ConsumerWidget {
                         children: [
                           Text(
                             '${milestoneLabel(pending)} reached',
-                            style: TextStyle(
-                              fontSize: 17,
-                              fontWeight: FontWeight.w600,
-                              color: ns.ink,
-                            ),
+                            style: AppType.subhead.copyWith(color: ns.ink),
                           ),
                           const SizedBox(height: 2),
                           Text(
                             'Worth noticing.',
-                            style: TextStyle(
-                              fontSize: 14,
-                              fontWeight: FontWeight.w500,
-                              color: ns.ink,
-                            ),
+                            style: AppType.detail.copyWith(color: ns.ink),
                           ),
                         ],
                       ),
@@ -85,7 +78,7 @@ class MilestoneBanner extends ConsumerWidget {
                           .read(trackersProvider.notifier)
                           .acknowledgeMilestone(id, pending),
                       child: const Text('Got it',
-                          style: TextStyle(fontSize: 15)),
+                          style: AppType.miniButton),
                     ),
                   ],
                 ),

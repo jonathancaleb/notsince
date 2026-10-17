@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:notsince/core/theme/app_type.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:notsince/features/counter/application/progress_provider.dart';
 import 'package:notsince/features/counter/application/tracker_controller.dart';
@@ -40,12 +41,7 @@ class HistoryScreen extends ConsumerWidget {
             const SizedBox(height: 28),
             Text(
               'This is your first count. Past counts collect here.',
-              style: TextStyle(
-                fontSize: 15,
-                height: 1.45,
-                fontWeight: FontWeight.w500,
-                color: ns.muted,
-              ),
+              style: AppType.footnote.copyWith(color: ns.muted),
             ),
           ],
           for (final run in past) ...[
@@ -91,11 +87,7 @@ class _RunTile extends StatelessWidget {
             children: [
               Text(
                 title,
-                style: TextStyle(
-                  fontSize: 19,
-                  fontWeight: FontWeight.w600,
-                  color: ns.ink,
-                ),
+                style: AppType.section.copyWith(color: ns.ink),
               ),
               if (isCurrent) ...[
                 const SizedBox(width: 10),
@@ -109,11 +101,7 @@ class _RunTile extends StatelessWidget {
                   ),
                   child: Text(
                     'now',
-                    style: TextStyle(
-                      fontSize: 13,
-                      fontWeight: FontWeight.w600,
-                      color: ns.ink,
-                    ),
+                    style: AppType.smallStrong.copyWith(color: ns.ink),
                   ),
                 ),
               ],
@@ -122,9 +110,7 @@ class _RunTile extends StatelessWidget {
           const SizedBox(height: 4),
           Text(
             subtitle,
-            style: TextStyle(
-              fontSize: 14,
-              fontWeight: FontWeight.w500,
+            style: AppType.hint.copyWith(
               color: isCurrent ? ns.ink : ns.muted,
             ),
           ),

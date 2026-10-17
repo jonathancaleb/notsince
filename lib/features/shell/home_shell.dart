@@ -254,8 +254,7 @@ class _NavItem extends StatelessWidget {
             const SizedBox(height: 3),
             Text(
               label,
-              style: AppType.muted(ns).copyWith(
-                fontSize: 11,
+              style: AppType.navCaption.copyWith(
                 fontWeight: isSelected ? FontWeight.w700 : FontWeight.w600,
                 color: isSelected ? ns.ink : ns.muted,
               ),

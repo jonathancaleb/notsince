@@ -3,6 +3,7 @@ import 'package:notsince/features/alarms/application/alarms_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:notsince/features/counter/application/tracker_controller.dart';
+import 'package:notsince/core/theme/app_spacing.dart';
 import 'package:notsince/core/theme/ns_colors.dart';
 import 'package:notsince/core/app_info/app_info.dart';
 import 'package:notsince/core/prefs/app_prefs.dart';
@@ -33,7 +34,7 @@ class AppSettingsScreen extends ConsumerWidget {
           'Every habit, alarm, note and task is erased from this device, '
           'including $count ${count == 1 ? 'habit' : 'habits'} and their '
           'history. This cannot be undone.',
-          style: const TextStyle(fontSize: 15, height: 1.45),
+          style: AppType.footnote,
         ),
         actions: [
           TextButton(
@@ -89,12 +90,7 @@ class AppSettingsScreen extends ConsumerWidget {
           const SizedBox(height: 6),
           Text(
             'Drag to change the order you swipe through them.',
-            style: TextStyle(
-              fontSize: 14,
-              height: 1.45,
-              fontWeight: FontWeight.w500,
-              color: ns.muted,
-            ),
+            style: AppType.hint.copyWith(color: ns.muted),
           ),
           const SizedBox(height: 14),
           ReorderableListView.builder(
@@ -118,18 +114,14 @@ class AppSettingsScreen extends ConsumerWidget {
                   radius: Sticker.smallRadius,
                   child: Row(
                     children: [
-                      Text(tracker.emoji, style: const TextStyle(fontSize: 22)),
+                      Text(tracker.emoji, style: AppType.glyph(22)),
                       const SizedBox(width: 12),
                       Expanded(
                         child: Text(
                           tracker.name,
                           maxLines: 1,
                           overflow: TextOverflow.ellipsis,
-                          style: TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.w600,
-                            color: ns.ink,
-                          ),
+                          style: AppType.bodyStrong.copyWith(color: ns.ink),
                         ),
                       ),
                       IconButton(
@@ -206,15 +198,10 @@ class AppSettingsScreen extends ConsumerWidget {
             child: Text(
               'Everything stays on this device. There is no account, no sync, '
               'no analytics, and the app never connects to the internet.',
-              style: TextStyle(
-                fontSize: 15,
-                height: 1.45,
-                fontWeight: FontWeight.w500,
-                color: ns.ink,
-              ),
+              style: AppType.footnote.copyWith(color: ns.ink),
             ),
           ),
-          const SizedBox(height: 16),
+          const SizedBox(height: AppSpacing.sm),
           StickerButton(
             color: ns.paper,
             foreground: ns.ink,
@@ -222,7 +209,7 @@ class AppSettingsScreen extends ConsumerWidget {
             onPressed: () => _wipe(context, ref, trackers.length),
             child: const Text('Remove all data'),
           ),
-          const SizedBox(height: 32),
+          const SizedBox(height: AppSpacing.lg),
           const _SectionTitle('About'),
           const SizedBox(height: 12),
           _AboutRow(
@@ -248,7 +235,7 @@ class AppSettingsScreen extends ConsumerWidget {
             child: Text(
               '${AppInfo.name} ${AppInfo.version}\nby ${AppInfo.developer}',
               textAlign: TextAlign.center,
-              style: AppType.muted(ns).copyWith(fontSize: 13),
+              style: AppType.muted(ns),
             ),
           ),
         ],
@@ -296,7 +283,7 @@ class _ThemePicker extends StatelessWidget {
                     children: [
                       Icon(icon, size: 20, color: ns.ink),
                       const SizedBox(height: 4),
-                      Text(label, style: AppType.label.copyWith(fontSize: 13)),
+                      Text(label, style: AppType.smallStrong),
                     ],
                   ),
                 ),
@@ -337,7 +324,7 @@ class _ToggleRow extends StatelessWidget {
               children: [
                 Text(label, style: AppType.label),
                 const SizedBox(height: 2),
-                Text(detail, style: AppType.muted(ns).copyWith(fontSize: 13)),
+                Text(detail, style: AppType.muted(ns)),
               ],
             ),
           ),
@@ -385,11 +372,7 @@ class _SectionTitle extends StatelessWidget {
     final ns = context.ns;
     return Text(
       text,
-      style: TextStyle(
-        fontSize: 19,
-        fontWeight: FontWeight.w600,
-        color: ns.ink,
-      ),
+      style: AppType.section.copyWith(color: ns.ink),
     );
   }
 }

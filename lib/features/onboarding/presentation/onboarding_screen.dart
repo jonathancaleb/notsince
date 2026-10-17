@@ -10,8 +10,8 @@ import 'package:notsince/core/widgets/wordmark.dart';
 
 /// Four pages, swipeable, then out of the way for good.
 ///
-/// The illustration on each page is built from the app's own shapes — the
-/// sticker cards, dots and checkmarks you will actually meet — rather than
+/// The illustration on each page is built from the app's own shapes â€” the
+/// sticker cards, dots and checkmarks you will actually meet â€” rather than
 /// stock artwork, so onboarding is a preview of the thing rather than an advert
 /// for it. No mascot, no character: the brief rules those out and the shapes
 /// carry it fine.
@@ -220,7 +220,7 @@ class _PageView extends StatelessWidget {
             style: AppType.counter(30).copyWith(height: 1.15),
           ),
           const SizedBox(height: 14),
-          Text(page.body, style: AppType.bodyText.copyWith(fontSize: 16)),
+          Text(page.body, style: AppType.bodyText),
           const SizedBox(height: 24),
         ],
       ),
@@ -251,10 +251,10 @@ class _Illustration extends StatelessWidget {
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  const Text('🍺', style: TextStyle(fontSize: 26)),
+                  Text('ðŸº', style: AppType.glyph(26)),
                   const SizedBox(height: 4),
                   Text('12', style: AppType.counter(84)),
-                  Text('days', style: AppType.cardTitle.copyWith(fontSize: 18)),
+                  Text('days', style: AppType.subtitle),
                 ],
               ),
             ),
@@ -281,7 +281,7 @@ class _Illustration extends StatelessWidget {
                       children: [
                         Text('34', style: AppType.counter(44)),
                         Text('kept',
-                            style: AppType.muted(ns).copyWith(fontSize: 13)),
+                            style: AppType.muted(ns)),
                       ],
                     ),
                   ),
@@ -302,7 +302,7 @@ class _Illustration extends StatelessWidget {
                     children: [
                       Text('0', style: AppType.counter(52)),
                       Text('again',
-                          style: AppType.bodyText.copyWith(fontSize: 13)),
+                          style: AppType.small),
                     ],
                   ),
                 ),
@@ -325,7 +325,7 @@ class _Illustration extends StatelessWidget {
                   child: Row(
                     mainAxisSize: MainAxisSize.min,
                     children: [
-                      const Text('🔔', style: TextStyle(fontSize: 22)),
+                      Text('ðŸ””', style: AppType.glyph(22)),
                       const SizedBox(width: 12),
                       Text('06:30', style: AppType.counter(34)),
                     ],
@@ -356,7 +356,7 @@ class _Illustration extends StatelessWidget {
                       ),
                       const SizedBox(width: 12),
                       Text('Call the dentist',
-                          style: AppType.cardTitle.copyWith(fontSize: 16)),
+                          style: AppType.cardSmall),
                     ],
                   ),
                 ),
@@ -389,10 +389,10 @@ class _Illustration extends StatelessWidget {
                   ),
                   const SizedBox(height: 14),
                   Text('on this phone',
-                      style: AppType.cardTitle.copyWith(fontSize: 17)),
+                      style: AppType.cardLead),
                   const SizedBox(height: 2),
                   Text('and nowhere else',
-                      style: AppType.muted(ns).copyWith(fontSize: 13)),
+                      style: AppType.muted(ns)),
                 ],
               ),
             ),
