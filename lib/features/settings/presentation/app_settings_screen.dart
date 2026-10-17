@@ -1,3 +1,5 @@
+import 'package:notsince/features/planner/data/planner_store.dart';
+import 'package:notsince/features/alarms/application/alarms_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:notsince/features/counter/application/tracker_controller.dart';
@@ -48,7 +50,11 @@ class AppSettingsScreen extends ConsumerWidget {
 
     if (confirmed != true || !context.mounted) return;
     await ref.read(trackersProvider.notifier).wipeAll();
+    for (final alarm in [...ref.read(alarmsProvider)]) {
+      await ref.read(alarmsProvider.notifier).delete(alarm.id);
+    }
     await ref.read(notesProvider.notifier).clearAll();
+    await ref.read(plannerProvider.notifier).clear();
     await ref.read(appPrefsProvider).clear();
     if (context.mounted) Navigator.of(context).pop();
   }
@@ -57,7 +63,9 @@ class AppSettingsScreen extends ConsumerWidget {
   /// so the schedule is rebuilt rather than waiting for the next launch.
   void _reschedule(WidgetRef ref) {
     final settings = ref.read(appSettingsProvider);
-    ref.read(notificationServiceProvider).reconcile(
+    ref
+        .read(notificationServiceProvider)
+        .reconcile(
           trackers: ref.read(trackersProvider),
           notes: ref.read(notesProvider),
           milestonesEnabled: settings.notifyMilestones,
@@ -139,8 +147,11 @@ class AppSettingsScreen extends ConsumerWidget {
                         index: i,
                         child: Padding(
                           padding: EdgeInsets.symmetric(horizontal: 6),
-                          child: Icon(Icons.drag_handle_rounded,
-                              size: 22, color: ns.ink),
+                          child: Icon(
+                            Icons.drag_handle_rounded,
+                            size: 22,
+                            color: ns.ink,
+                          ),
                         ),
                       ),
                     ],
@@ -208,9 +219,7 @@ class AppSettingsScreen extends ConsumerWidget {
             color: ns.paper,
             foreground: ns.ink,
             thin: true,
-            onPressed: trackers.isEmpty
-                ? null
-                : () => _wipe(context, ref, trackers.length),
+            onPressed: () => _wipe(context, ref, trackers.length),
             child: const Text('Remove all data'),
           ),
           const SizedBox(height: 32),
@@ -358,8 +367,7 @@ class _AboutRow extends StatelessWidget {
         child: Row(
           children: [
             Expanded(child: Text(label, style: AppType.label)),
-            Icon(Icons.chevron_right_rounded,
-                size: 22, color: ns.ink),
+            Icon(Icons.chevron_right_rounded, size: 22, color: ns.ink),
           ],
         ),
       ),

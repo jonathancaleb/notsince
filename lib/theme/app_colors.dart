@@ -8,8 +8,16 @@ abstract final class AppColors {
   static const darkBg = Color(0xFF171513);
   static const darkSurface = Color(0xFF1E1C1A);
   static const darkInk = Color(0xFFF3EDE3);
-  static const palette = <int>[0xFF639922, 0xFFE8B33D, 0xFF5B9DC9,
-    0xFF9B7BC4, 0xFF2E9187, 0xFFD2739B];
-  static Color lifted(int argb, Brightness brightness) => brightness == Brightness.dark
-      ? Color.lerp(Color(argb), Colors.white, .1)! : Color(argb);
+  static const palette = <int>[
+    0xFF639922,
+    0xFFE8B33D,
+    0xFF5B9DC9,
+    0xFF9B7BC4,
+    0xFF2E9187,
+    0xFFD2739B,
+  ];
+  static Color lifted(int argb, Brightness brightness) =>
+      brightness == Brightness.dark
+      ? Color.lerp(Color(argb), Colors.white, .1)!
+      : Color(argb);
 }

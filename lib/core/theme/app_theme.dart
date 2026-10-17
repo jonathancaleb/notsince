@@ -43,7 +43,9 @@ ThemeData _theme(NsColors ns, Brightness brightness) {
     surfaceContainerHighest: ns.tint,
     onSurfaceVariant: ns.muted,
     outline: ns.ink.withValues(alpha: .10),
-    outlineVariant: ns.ink.withValues(alpha: brightness == Brightness.dark ? .02 : .10),
+    outlineVariant: ns.ink.withValues(
+      alpha: brightness == Brightness.dark ? .02 : .10,
+    ),
     inverseSurface: ns.ink,
     onInverseSurface: ns.paper,
     inversePrimary: ns.accent,
@@ -61,10 +63,7 @@ ThemeData _theme(NsColors ns, Brightness brightness) {
 
   // Text inherits its colour from here, so styles in AppType stay colourless
   // and work in both themes without every call site restating it.
-  final text = base.textTheme.apply(
-    bodyColor: ns.ink,
-    displayColor: ns.ink,
-  );
+  final text = base.textTheme.apply(bodyColor: ns.ink, displayColor: ns.ink);
 
   return base.copyWith(
     extensions: [ns],
@@ -109,8 +108,9 @@ ThemeData _theme(NsColors ns, Brightness brightness) {
       dragHandleColor: ns.ink,
       shape: RoundedRectangleBorder(
         side: BorderSide(color: ns.ink, width: Sticker.border),
-        borderRadius:
-            const BorderRadius.vertical(top: Radius.circular(Sticker.radius)),
+        borderRadius: const BorderRadius.vertical(
+          top: Radius.circular(Sticker.radius),
+        ),
       ),
     ),
     textButtonTheme: TextButtonThemeData(
@@ -135,7 +135,6 @@ ThemeData _theme(NsColors ns, Brightness brightness) {
 }
 
 OutlineInputBorder _fieldBorder(Color ink, double width) => OutlineInputBorder(
-      borderRadius: BorderRadius.circular(Sticker.smallRadius),
-      borderSide: BorderSide(color: ink, width: width),
-    );
-
+  borderRadius: BorderRadius.circular(Sticker.smallRadius),
+  borderSide: BorderSide(color: ink, width: width),
+);

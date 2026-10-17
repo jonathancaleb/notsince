@@ -19,24 +19,24 @@ abstract final class AppType {
 
   /// The day count. Sized by the caller; this only fixes its character.
   static TextStyle counter(double size) => TextStyle(
-        fontFamily: display,
-        fontSize: size,
-        fontWeight: FontWeight.w800,
-        height: 1.0,
-        // Baloo is wide by nature; pulling it in keeps a big number a single
-        // shape rather than a row of separate glyphs.
-        letterSpacing: size * -0.03,
-      );
+    fontFamily: display,
+    fontSize: size,
+    fontWeight: FontWeight.w800,
+    height: 1.0,
+    // Baloo is wide by nature; pulling it in keeps a big number a single
+    // shape rather than a row of separate glyphs.
+    letterSpacing: size * -0.03,
+  );
 
   static const screenTitle = TextStyle(
     fontFamily: display,
-    fontSize: 24,
+    fontSize: 22,
     fontWeight: FontWeight.w700,
   );
 
   static const cardTitle = TextStyle(
     fontFamily: display,
-    fontSize: 20,
+    fontSize: 22,
     fontWeight: FontWeight.w600,
   );
 
@@ -50,7 +50,7 @@ abstract final class AppType {
 
   static const bodyText = TextStyle(
     fontFamily: body,
-    fontSize: 15,
+    fontSize: 16,
     fontWeight: FontWeight.w500,
     height: 1.45,
   );
@@ -71,7 +71,7 @@ abstract final class AppType {
   /// Secondary text is a weight and a colour, not a different face.
   static const small = TextStyle(
     fontFamily: body,
-    fontSize: 14,
+    fontSize: 13,
     fontWeight: FontWeight.w500,
     height: 1.45,
   );

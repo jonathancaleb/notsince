@@ -5,7 +5,11 @@ import 'package:notsince/core/theme/sticker.dart';
 /// A switch drawn in the app's own language — Material's has a blurred thumb
 /// shadow and its own palette, both of which would be the only ones on screen.
 class StickerSwitch extends StatelessWidget {
-  const StickerSwitch({super.key, required this.value, required this.onChanged});
+  const StickerSwitch({
+    super.key,
+    required this.value,
+    required this.onChanged,
+  });
 
   final bool value;
   final ValueChanged<bool> onChanged;
@@ -21,7 +25,9 @@ class StickerSwitch extends StatelessWidget {
         child: Padding(
           padding: const EdgeInsets.all(8),
           child: AnimatedContainer(
-            duration: const Duration(milliseconds: 160),
+            duration: MediaQuery.disableAnimationsOf(context)
+                ? Duration.zero
+                : const Duration(milliseconds: 160),
             curve: Curves.easeOut,
             width: 56,
             height: 32,
@@ -32,7 +38,9 @@ class StickerSwitch extends StatelessWidget {
               borderRadius: BorderRadius.circular(20),
             ),
             child: AnimatedAlign(
-              duration: const Duration(milliseconds: 160),
+              duration: MediaQuery.disableAnimationsOf(context)
+                  ? Duration.zero
+                  : const Duration(milliseconds: 160),
               curve: Curves.easeOut,
               alignment: value ? Alignment.centerRight : Alignment.centerLeft,
               child: Container(

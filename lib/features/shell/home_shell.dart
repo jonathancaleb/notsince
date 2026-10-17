@@ -7,12 +7,17 @@ import 'package:notsince/features/alarms/application/alarms_controller.dart';
 import 'package:notsince/features/alarms/data/alarm_scheduler.dart';
 import 'package:notsince/features/alarms/presentation/alarm_ring_screen.dart';
 import 'package:notsince/features/alarms/presentation/alarms_screen.dart';
-import 'package:notsince/features/counter/application/tracker_controller.dart';
-import 'package:notsince/features/counter/presentation/counter_screen.dart';
-import 'package:notsince/features/dashboard/presentation/dashboard_screen.dart';
-import 'package:notsince/features/notes/presentation/notes_screen.dart';
 
-enum HomeTab { home, habit, alarms, notes }
+import 'package:notsince/features/counter/presentation/counter_screen.dart';
+import 'package:notsince/features/planner/presentation/today_screen.dart';
+import 'package:notsince/features/planner/presentation/planner_screen.dart';
+import 'package:notsince/features/planner/presentation/notes_hub_screen.dart';
+import 'package:notsince/features/planner/presentation/reports_screen.dart';
+import 'package:notsince/features/garden/presentation/garden_screen.dart';
+import 'package:notsince/features/planner/data/planner_store.dart';
+import 'package:notsince/theme/app_colors.dart';
+
+enum HomeTab { home, habit, alarms, notes, planner, garden, insights }
 
 /// Which tab is showing.
 ///
@@ -26,8 +31,9 @@ class HomeTabController extends Notifier<HomeTab> {
   void select(HomeTab tab) => state = tab;
 }
 
-final homeTabProvider =
-    NotifierProvider<HomeTabController, HomeTab>(HomeTabController.new);
+final homeTabProvider = NotifierProvider<HomeTabController, HomeTab>(
+  HomeTabController.new,
+);
 
 class HomeShell extends ConsumerStatefulWidget {
   const HomeShell({super.key});
@@ -44,7 +50,12 @@ class _HomeShellState extends ConsumerState<HomeShell> {
   /// The full-screen intent already brings the app forward; this is what puts
   /// the right screen in front of the person once it is.
   void _onRinging(Set<int> ringing) {
-    if (ringing.isEmpty || _ringScreenOpen || !mounted) return;
+    if (ringing.isEmpty ||
+        _ringScreenOpen ||
+        !mounted ||
+        ModalRoute.of(context)?.isCurrent == false) {
+      return;
+    }
 
     final entry = ref
         .read(alarmsProvider)
@@ -78,18 +89,16 @@ class _HomeShellState extends ConsumerState<HomeShell> {
           IndexedStack(
             index: tab.index,
             children: const [
-              DashboardScreen(),
+              TodayScreen(),
               CounterScreen(),
               AlarmsScreen(),
-              NotesScreen(),
+              NotesHubScreen(),
+              PlannerScreen(),
+              GardenScreen(),
+              InsightsScreen(),
             ],
           ),
-          const Positioned(
-            left: 0,
-            right: 0,
-            bottom: 0,
-            child: _NavIsland(),
-          ),
+          const Positioned(left: 0, right: 0, bottom: 0, child: _NavIsland()),
         ],
       ),
     );
@@ -102,10 +111,11 @@ class _NavIsland extends ConsumerWidget {
   const _NavIsland();
 
   static const _items = <(HomeTab, IconData, String)>[
-    (HomeTab.home, Icons.cottage_rounded, 'Home'),
-    (HomeTab.habit, Icons.eco_rounded, 'Habit'),
-    (HomeTab.alarms, Icons.alarm_rounded, 'Alarms'),
+    (HomeTab.home, Icons.wb_sunny_rounded, 'Today'),
+    (HomeTab.planner, Icons.calendar_month_rounded, 'Planner'),
+    (HomeTab.garden, Icons.local_florist_rounded, 'Garden'),
     (HomeTab.notes, Icons.sticky_note_2_rounded, 'Notes'),
+    (HomeTab.insights, Icons.insights_rounded, 'Insights'),
   ];
 
   @override
@@ -118,30 +128,26 @@ class _NavIsland extends ConsumerWidget {
       top: false,
       child: Padding(
         padding: const EdgeInsets.fromLTRB(20, 0, 20, 14),
-        child: AnimatedContainer(
-          duration: const Duration(milliseconds: 220),
-          curve: Curves.easeOut,
-          padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
-          decoration: BoxDecoration(
-            color: ns.paper,
-            border: Sticker.outline(ns.ink),
-            borderRadius: BorderRadius.circular(Sticker.radius),
-            boxShadow: Sticker.shadow(ns.ink, Sticker.lift),
-          ),
-          child: Row(
-            children: [
-              for (final (tab, icon, label) in _items)
-                Expanded(
-                  child: _NavItem(
-                    icon: icon,
-                    label: label,
-                    accent: accent,
-                    isSelected: tab == current,
-                    onTap: () =>
-                        ref.read(homeTabProvider.notifier).select(tab),
+        child: CustomPaint(
+          painter: _NavPainter(Theme.of(context).colorScheme.surface, ns.ink),
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 12),
+            child: Row(
+              children: [
+                for (final (tab, icon, label) in _items)
+                  Expanded(
+                    child: _NavItem(
+                      icon: icon,
+                      label: label,
+                      raised: tab == HomeTab.garden,
+                      accent: accent,
+                      isSelected: tab == current,
+                      onTap: () =>
+                          ref.read(homeTabProvider.notifier).select(tab),
+                    ),
                   ),
-                ),
-            ],
+              ],
+            ),
           ),
         ),
       ),
@@ -161,11 +167,15 @@ Color _accentFor(BuildContext context, WidgetRef ref, HomeTab tab) {
       return ns.alarm;
     case HomeTab.notes:
       return ns.noteTag('blue');
+    case HomeTab.planner:
+    case HomeTab.garden:
+    case HomeTab.insights:
     case HomeTab.home:
     case HomeTab.habit:
-      final trackers = ref.watch(trackersProvider);
-      if (trackers.isEmpty) return ns.accent;
-      return ns.crayon(trackers.first.colorIndex);
+      return AppColors.lifted(
+        ref.watch(plannerProvider).accent,
+        Theme.of(context).brightness,
+      );
   }
 }
 
@@ -176,12 +186,14 @@ class _NavItem extends StatelessWidget {
     required this.accent,
     required this.isSelected,
     required this.onTap,
+    this.raised = false,
   });
 
   final IconData icon;
   final String label;
   final Color accent;
   final bool isSelected;
+  final bool raised;
   final VoidCallback onTap;
 
   @override
@@ -200,26 +212,43 @@ class _NavItem extends StatelessWidget {
             // the same lift language as every other pressable sticker, so the
             // current tab looks like the one thing standing up.
             AnimatedContainer(
-              duration: const Duration(milliseconds: 200),
+              duration: MediaQuery.disableAnimationsOf(context)
+                  ? Duration.zero
+                  : const Duration(milliseconds: 200),
               curve: Curves.easeOut,
               width: 44,
               height: 36,
               alignment: Alignment.center,
-              transform: Matrix4.translationValues(0, isSelected ? -3 : 0, 0),
+              transform: Matrix4.translationValues(
+                0,
+                raised
+                    ? -8
+                    : isSelected
+                    ? -3
+                    : 0,
+                0,
+              ),
               decoration: BoxDecoration(
                 color: isSelected ? accent : Colors.transparent,
                 border: Border.all(
-                  color: isSelected ? ns.ink : Colors.transparent,
+                  color: isSelected
+                      ? ns.ink.withValues(alpha: .08)
+                      : Colors.transparent,
                   width: Sticker.thinBorder,
                 ),
                 borderRadius: BorderRadius.circular(18),
-                boxShadow:
-                    isSelected ? Sticker.shadow(ns.ink, const Offset(2, 3)) : null,
+                boxShadow: isSelected
+                    ? Sticker.shadow(ns.ink, const Offset(2, 3))
+                    : null,
               ),
               child: Icon(
                 icon,
                 size: 20,
-                color: isSelected ? ns.ink : ns.muted,
+                color: isSelected
+                    ? (accent.computeLuminance() > .18
+                          ? AppColors.darkBg
+                          : Colors.white)
+                    : ns.muted,
               ),
             ),
             const SizedBox(height: 3),
@@ -236,4 +265,29 @@ class _NavItem extends StatelessWidget {
       ),
     );
   }
+}
+
+class _NavPainter extends CustomPainter {
+  const _NavPainter(this.surface, this.ink);
+  final Color surface, ink;
+  @override
+  void paint(Canvas canvas, Size size) {
+    final path = Path()
+      ..addRRect(
+        RRect.fromRectAndRadius(Offset.zero & size, const Radius.circular(28)),
+      );
+    canvas.drawShadow(path, Colors.black.withValues(alpha: .16), 12, false);
+    canvas.drawPath(path, Paint()..color = surface);
+    canvas.drawPath(
+      path,
+      Paint()
+        ..color = ink.withValues(alpha: ink.computeLuminance() > .5 ? .02 : .1)
+        ..style = PaintingStyle.stroke
+        ..strokeWidth = .7,
+    );
+  }
+
+  @override
+  bool shouldRepaint(_NavPainter oldDelegate) =>
+      oldDelegate.surface != surface || oldDelegate.ink != ink;
 }

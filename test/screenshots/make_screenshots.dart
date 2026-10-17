@@ -1,7 +1,7 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
-import 'dart:typed_data';
+
 import 'dart:ui' show ImageByteFormat;
 
 import 'package:flutter/rendering.dart';
@@ -9,7 +9,9 @@ import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:notsince/core/prefs/app_prefs.dart';
-import 'package:notsince/core/theme/app_theme.dart';
+import 'package:notsince/theme/app_theme.dart';
+import 'package:notsince/features/planner/data/planner_store.dart';
+import 'package:notsince/features/planner/domain/models.dart';
 import 'package:notsince/core/time/clock.dart';
 import 'package:notsince/features/alarms/application/alarms_controller.dart';
 import 'package:notsince/features/alarms/data/alarm_repository.dart';
@@ -49,6 +51,7 @@ const String emojiFamily = 'NotoColorEmoji';
 const double s23Density = 3.0;
 const int statusBarPx = 108;
 const int gestureBarPx = 54;
+
 /// Logical size: 360x726dp, which is an S23's 360x780 less the two strips.
 const Size s23AppArea = Size(360, 726);
 
@@ -65,7 +68,7 @@ void main() {
     await _loadBundledFonts();
   });
 
-  setUp(() {
+  setUp(() async {
     prefs = FakePrefs();
     container = ProviderContainer(
       overrides: [
@@ -80,6 +83,7 @@ void main() {
       ],
     );
     _seed(container);
+    await _seedPlanner(container);
   });
 
   tearDown(() => container.dispose());
@@ -111,8 +115,8 @@ void main() {
           container: container,
           child: MaterialApp(
             debugShowCheckedModeBanner: false,
-            theme: _withEmoji(buildLightTheme()),
-            darkTheme: _withEmoji(buildDarkTheme()),
+            theme: _withEmoji(AppTheme.light),
+            darkTheme: _withEmoji(AppTheme.dark),
             themeMode: mode,
             home: const HomeShell(),
           ),
@@ -132,7 +136,9 @@ void main() {
       image.dispose();
     });
 
-    final out = File('test/screenshots/raw/$name.png');
+    final output =
+        Platform.environment['SCREENSHOT_OUTPUT'] ?? 'test/screenshots/raw';
+    final out = File('$output/$name.png');
     out.parent.createSync(recursive: true);
     out.writeAsBytesSync(png);
     // ignore: avoid_print
@@ -143,8 +149,57 @@ void main() {
   testWidgets('02 habit', (t) => shoot(t, '02-habit', tab: HomeTab.habit));
   testWidgets('03 alarms', (t) => shoot(t, '03-alarms', tab: HomeTab.alarms));
   testWidgets('04 notes', (t) => shoot(t, '04-notes', tab: HomeTab.notes));
-  testWidgets('05 dark home',
-      (t) => shoot(t, '05-dark', mode: ThemeMode.dark));
+  testWidgets('05 dark home', (t) => shoot(t, '05-dark', mode: ThemeMode.dark));
+  testWidgets(
+    '06 planner',
+    (t) => shoot(t, '06-planner', tab: HomeTab.planner),
+  );
+  testWidgets('07 garden', (t) => shoot(t, '07-garden', tab: HomeTab.garden));
+  testWidgets(
+    '08 insights',
+    (t) => shoot(t, '08-insights', tab: HomeTab.insights),
+  );
+  testWidgets(
+    '09 dark garden',
+    (t) =>
+        shoot(t, '09-dark-garden', tab: HomeTab.garden, mode: ThemeMode.dark),
+  );
+}
+
+Future<void> _seedPlanner(ProviderContainer container) async {
+  final planner = container.read(plannerProvider.notifier);
+  await planner.addProject('Personal', 0xFF639922);
+  await planner.addProject('Work', 0xFF5B9DC9);
+  await planner.addTask('A walk before lunch @Personal');
+  await planner.addTask(
+    'Finish a first draft @Work',
+    recurrence: const RecurrenceRule(weekdays: [1, 2, 3, 4, 5]),
+  );
+  await planner.addTask('Make time for a chapter @Personal');
+  await planner.saveNote(
+    const PlannerNote(
+      id: 'reflection',
+      body: '# A gentler rhythm\n\nA little care goes a long way.\n\n- Walk after dinner\n- Read a chapter\n- Put the phone down',
+    ),
+  );
+  final clock = container.read(clockProvider) as FixedClock;
+  final habits = container.read(trackersProvider);
+  for (var i = 6; i >= 0; i--) {
+    clock.set(shotTime.subtract(Duration(days: i)));
+    await planner.checkIn(habits.first.id);
+  }
+  clock.set(DateTime(shotTime.year, shotTime.month, shotTime.day, 9));
+  await planner.toggleTimer(SubjectType.day, dayKey(shotTime));
+  clock.set(DateTime(shotTime.year, shotTime.month, shotTime.day, 9, 25));
+  await planner.toggleTimer(
+    SubjectType.project,
+    container.read(plannerProvider).projects.last.id,
+  );
+  clock.set(shotTime);
+  await planner.toggleTimer(
+    SubjectType.project,
+    container.read(plannerProvider).projects.last.id,
+  );
 }
 
 /// Adds the emoji fallback the device would supply from its system fonts.
@@ -193,24 +248,26 @@ void _seed(ProviderContainer container) {
   final notes = container.read(notesProvider.notifier);
 
   final task = notes.create(isTask: true, colorTag: 'blue');
-  notes.save(task.id,
-      title: 'Call the dentist',
-      body: 'Ask about the evening slot',
-      dueAt: shotTime.add(const Duration(days: 2)));
+  notes.save(
+    task.id,
+    title: 'Call the dentist',
+    body: 'Ask about the evening slot',
+    dueAt: shotTime.add(const Duration(days: 2)),
+  );
 
   final done = notes.create(isTask: true, colorTag: 'sage');
   notes.save(done.id, title: 'Book gym induction', body: 'Tuesday, 7pm');
   notes.setDone(done.id, true);
 
   final list = notes.create(colorTag: 'yellow');
-  notes.save(list.id,
-      title: 'Things that help',
-      body: 'Walk after dinner\nCall Sam\nBed before 11');
+  notes.save(
+    list.id,
+    title: 'Things that help',
+    body: 'Walk after dinner\nCall Sam\nBed before 11',
+  );
 
   final plan = notes.create(colorTag: 'coral');
-  notes.save(plan.id,
-      title: 'Saturday',
-      body: 'Cinema instead of the pub');
+  notes.save(plan.id, title: 'Saturday', body: 'Cinema instead of the pub');
 }
 
 /// Loads the app's own fonts into the test renderer.
@@ -246,7 +303,8 @@ Future<void> _loadBundledFonts() async {
   // Material's icon font ships with the SDK rather than the app, so the test
   // renderer has to be pointed at it or every icon draws as an empty box.
   final icons = File(
-      '${_flutterRoot()}/bin/cache/artifacts/material_fonts/materialicons-regular.otf');
+    '${_flutterRoot()}/bin/cache/artifacts/material_fonts/materialicons-regular.otf',
+  );
   if (icons.existsSync()) {
     final loader = FontLoader('MaterialIcons')
       ..addFont(icons.readAsBytes().then((b) => ByteData.view(b.buffer)));
@@ -275,7 +333,8 @@ Future<void> _loadBundledFonts() async {
 String _flutterRoot() {
   var dir = File(Platform.resolvedExecutable).parent;
   while (dir.path != dir.parent.path) {
-    if (Directory('${dir.path}/bin/cache/artifacts/material_fonts').existsSync()) {
+    if (Directory('${dir.path}/bin/cache/artifacts/material_fonts')
+        .existsSync()) {
       return dir.path;
     }
     dir = dir.parent;

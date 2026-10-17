@@ -63,11 +63,13 @@ class _StickerButtonState extends State<StickerButton> {
         onTapCancel: _enabled ? () => setState(() => _down = false) : null,
         onTap: widget.onPressed,
         child: AnimatedContainer(
-          duration: const Duration(milliseconds: 90),
+          duration: MediaQuery.disableAnimationsOf(context)
+              ? Duration.zero
+              : const Duration(milliseconds: 120),
           curve: Curves.easeOut,
           transform: Matrix4.translationValues(
-            pressed ? travel.dx : 0,
-            pressed ? travel.dy : 0,
+            pressed && !MediaQuery.disableAnimationsOf(context) ? travel.dx : 0,
+            pressed && !MediaQuery.disableAnimationsOf(context) ? travel.dy : 0,
             0,
           ),
           padding: widget.padding,
@@ -86,10 +88,7 @@ class _StickerButtonState extends State<StickerButton> {
               fontSize: 17,
             ),
             child: IconTheme(
-              data: IconThemeData(
-                color: _enabled ? ink : ns.muted,
-                size: 20,
-              ),
+              data: IconThemeData(color: _enabled ? ink : ns.muted, size: 20),
               child: widget.expand
                   ? Row(
                       mainAxisAlignment: MainAxisAlignment.center,

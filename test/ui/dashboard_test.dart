@@ -5,7 +5,9 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:notsince/core/prefs/app_prefs.dart';
 import 'package:notsince/features/notifications/data/notification_service.dart';
+
 import '../support/fakes.dart';
+
 import 'package:hive_ce/hive.dart';
 import 'package:notsince/core/hive/hive_registrar.g.dart';
 import 'package:notsince/core/theme/app_theme.dart';
@@ -22,6 +24,7 @@ import 'package:notsince/features/notes/application/notes_controller.dart';
 import 'package:notsince/features/notes/data/note_repository.dart';
 import 'package:notsince/features/notes/domain/note.dart';
 import 'package:notsince/features/shell/home_shell.dart';
+import 'package:notsince/features/dashboard/presentation/dashboard_screen.dart';
 
 class _FixedClock implements Clock {
   const _FixedClock(this._now);
@@ -104,13 +107,17 @@ void main() {
 
   Future<void> seed(WidgetTester tester) async {
     await tester.runAsync(() async {
-      container.read(trackersProvider.notifier).create(
+      container
+          .read(trackersProvider.notifier)
+          .create(
             name: 'Drinking',
             startedAt: now.subtract(const Duration(days: 12)),
             emoji: '🍺',
             colorIndex: 0,
           );
-      await container.read(alarmsProvider.notifier).create(
+      await container
+          .read(alarmsProvider.notifier)
+          .create(
             label: 'Wake up',
             hour: 6,
             minute: 30,
@@ -128,14 +135,17 @@ void main() {
     });
   }
 
-  Future<void> pump(WidgetTester tester) async {
+  Future<void> pump(WidgetTester tester, {bool shell = false}) async {
     await tester.pumpWidget(
       UncontrolledProviderScope(
         container: container,
-        child: MaterialApp(theme: buildLightTheme(), home: const HomeShell()),
+        child: MaterialApp(
+          theme: buildLightTheme(),
+          home: shell ? const HomeShell() : const DashboardScreen(),
+        ),
       ),
     );
-    await tester.pump();
+    await tester.pumpAndSettle();
   }
 
   testWidgets('the dashboard shows all three domains at once', (tester) async {
@@ -173,19 +183,27 @@ void main() {
 
   testWidgets('the nav moves between tabs', (tester) async {
     await seed(tester);
-    await pump(tester);
+    await pump(tester, shell: true);
 
-    await tester.tap(find.text('Alarms'));
+    await tester.tap(find.byTooltip('Alarms'));
     await tester.pumpAndSettle();
     expect(find.text('Wake up  ·  Weekdays'), findsOneWidget);
 
-    await tester.tap(find.text('Notes'));
+    await tester.pageBack();
     await tester.pumpAndSettle();
-    expect(find.text('Create note or task'), findsOneWidget);
+    await tester.tap(find.text('Notes').last);
+    await tester.pumpAndSettle();
+    expect(find.text('A fresh page'), findsOneWidget);
 
-    await tester.tap(find.text('Habit'));
+    await tester.tap(find.text('Garden'));
     await tester.pumpAndSettle();
-    expect(find.text('Start a new count'), findsOneWidget);
+    expect(find.text('Your habit garden'), findsOneWidget);
+    await tester.tap(find.text('Planner'));
+    await tester.pumpAndSettle();
+    expect(find.text('All projects'), findsOneWidget);
+    await tester.tap(find.text('Insights'));
+    await tester.pumpAndSettle();
+    expect(find.text('Time well spent'), findsOneWidget);
   });
 
   testWidgets('a dashboard summary card hands off to its tab', (tester) async {
@@ -206,7 +224,8 @@ void main() {
     await tester.tap(find.text('Weekdays'));
     await tester.pumpAndSettle();
 
-    expect(find.text('Add an alarm'), findsOneWidget);
     expect(container.read(homeTabProvider), HomeTab.alarms);
+    await pump(tester, shell: true);
+    expect(find.text('Add an alarm'), findsOneWidget);
   });
 }

@@ -8,7 +8,7 @@ class StickerCard extends StatelessWidget {
     super.key,
     required this.child,
     this.color,
-    this.padding = const EdgeInsets.all(20),
+    this.padding = const EdgeInsets.all(24),
     this.radius = Sticker.radius,
     this.lift = Sticker.lift,
     this.thin = false,

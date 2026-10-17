@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Resources reached only by name from Dart, which the shrinker cannot see.
+
+     `ic_notification` is passed to flutter_local_notifications and to the alarm
+     plugin as the string "ic_notification" and resolved with
+     Resources.getIdentifier at runtime. Nothing in Java, Kotlin or XML mentions
+     it, so `isShrinkResources` removed it from every release build — and
+     FlutterLocalNotificationsPlugin.initialize fails outright on an icon it
+     cannot resolve, which took the whole app down before runApp. Debug builds
+     do not shrink, which is why it only ever broke in release. -->
+<resources
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:keep="@drawable/ic_notification" />

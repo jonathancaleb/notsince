@@ -62,7 +62,7 @@ class NsColors extends ThemeExtension<NsColors> {
     accent: Color(0xFF639922),
     tint: Color(0xFFEAF3DE),
     onInk: Color(0xFFFFFFFF),
-    muted: Color(0x99173404),
+    muted: Color(0xFF797168),
     alarm: Color(0xFFF5A623),
     alarmTint: Color(0xFFFDF0D9),
     crayons: [
@@ -89,13 +89,8 @@ class NsColors extends ThemeExtension<NsColors> {
     },
   );
 
-  /// The same palette inverted rather than a different one.
-  ///
-  /// The ground goes to a warm near-black with green in it, never a neutral
-  /// grey — a grey ground would lose the warmth the light theme is built on.
-  /// The ink becomes pale so outlines still read, and every fill is darkened
-  /// just enough that pale ink and ink-coloured text sit on it legibly, since
-  /// the light crayons are far too bright to carry dark text on a dark page.
+  /// Warm charcoal surfaces; habit ring accents are lifted by AppColors.
+  /// Tinted fills remain quiet enough to support light text.
   static const dark = NsColors(
     ink: Color(0xFFF3EDE3),
     paper: Color(0xFF171513),
@@ -103,7 +98,7 @@ class NsColors extends ThemeExtension<NsColors> {
     accent: Color(0xFFA3D46C),
     tint: Color(0xFF1E1C1A),
     onInk: Color(0xFF171513),
-    muted: Color(0x99E6F0D8),
+    muted: Color(0xFFB6ACA0),
     alarm: Color(0xFFD9922A),
     alarmTint: Color(0xFF2E2411),
     crayons: [
@@ -166,9 +161,8 @@ class NsColors extends ThemeExtension<NsColors> {
   NsColors lerp(NsColors? other, double t) {
     if (other == null) return this;
     List<Color> lerpAll(List<Color> a, List<Color> b) => [
-          for (var i = 0; i < a.length; i++)
-            Color.lerp(a[i], b[i % b.length], t)!,
-        ];
+      for (var i = 0; i < a.length; i++) Color.lerp(a[i], b[i % b.length], t)!,
+    ];
 
     return NsColors(
       ink: Color.lerp(ink, other.ink, t)!,
@@ -185,7 +179,8 @@ class NsColors extends ThemeExtension<NsColors> {
       noteTags: {
         for (final entry in noteTags.entries)
           entry.key:
-              Color.lerp(entry.value, other.noteTags[entry.key], t) ?? entry.value,
+              Color.lerp(entry.value, other.noteTags[entry.key], t) ??
+              entry.value,
       },
     );
   }
@@ -195,4 +190,3 @@ extension NsColorsContext on BuildContext {
   /// The palette for the current theme.
   NsColors get ns => Theme.of(this).extension<NsColors>() ?? NsColors.light;
 }
-
