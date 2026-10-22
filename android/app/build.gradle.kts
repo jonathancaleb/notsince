@@ -19,7 +19,7 @@ plugins {
 android {
     namespace = "app.notsince"
     compileSdk = flutter.compileSdkVersion
-    ndkVersion = flutter.ndkVersion
+    ndkVersion = "30.0.16248370"
 
     compileOptions {
         // flutter_local_notifications schedules against java.time, which does
