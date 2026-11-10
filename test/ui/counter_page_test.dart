@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:notsince/core/prefs/app_prefs.dart';
@@ -44,6 +45,20 @@ void main() {
   late ProviderContainer container;
   late FakePrefs prefs;
   late FakeNotifications notifications;
+
+  // The "fits on a handset" checks below measure real geometry, so they need
+  // the real pen face: the test renderer's placeholder font is a full em wide
+  // per letter, about twice the pen's width, and wraps lines the app never
+  // wraps.
+  setUpAll(() async {
+    final loader = FontLoader('NanumPen')
+      ..addFont(
+        File('assets/fonts/NanumPenScript-400.ttf')
+            .readAsBytes()
+            .then((b) => ByteData.view(b.buffer)),
+      );
+    await loader.load();
+  });
 
   final now = DateTime(2026, 3, 1, 12);
 

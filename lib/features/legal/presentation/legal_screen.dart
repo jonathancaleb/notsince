@@ -55,7 +55,7 @@ class LegalScreen extends StatelessWidget {
             color: ns.tint,
             padding: const EdgeInsets.all(16),
             child: Text(
-              '${AppInfo.name} ${AppInfo.version}  Â·  ${AppInfo.packageId}',
+              '${AppInfo.name} ${AppInfo.version}  ·  ${AppInfo.packageId}',
               style: AppType.muted(ns),
             ),
           ),
@@ -76,7 +76,7 @@ class _Block extends StatelessWidget {
     final first = lines.first;
     final isHeading = lines.length > 1 &&
         !first.endsWith('.') &&
-        !first.startsWith('â€¢') &&
+        !first.startsWith('•') &&
         first.length < 60;
 
     if (!isHeading) {

@@ -16,6 +16,7 @@ import 'package:notsince/core/widgets/sticker_switch.dart';
 import 'package:notsince/features/legal/presentation/legal_screen.dart';
 import 'package:notsince/features/notifications/data/notification_service.dart';
 import 'package:notsince/features/notes/application/notes_controller.dart';
+import 'package:notsince/core/widgets/doodle_icon.dart';
 
 /// App-wide settings: the order counters appear in, and the data as a whole.
 ///
@@ -125,7 +126,7 @@ class AppSettingsScreen extends ConsumerWidget {
                         ),
                       ),
                       IconButton(
-                        icon: const Icon(Icons.tune_rounded, size: 20),
+                        icon: const DoodleIcon(Icons.tune_rounded, size: 20),
                         color: ns.ink,
                         tooltip: 'Settings for ${tracker.name}',
                         onPressed: () => Navigator.of(context).push(
@@ -139,7 +140,7 @@ class AppSettingsScreen extends ConsumerWidget {
                         index: i,
                         child: Padding(
                           padding: EdgeInsets.symmetric(horizontal: 6),
-                          child: Icon(
+                          child: DoodleIcon(
                             Icons.drag_handle_rounded,
                             size: 22,
                             color: ns.ink,
@@ -285,7 +286,7 @@ class _ThemePicker extends StatelessWidget {
                     ),
                     child: Column(
                       children: [
-                        Icon(icon, size: 20, color: ns.ink),
+                        DoodleIcon(icon, size: 20, color: ns.ink),
                         const SizedBox(height: 4),
                         Text(label, style: AppType.smallStrong),
                       ],
@@ -361,7 +362,7 @@ class _AboutRow extends StatelessWidget {
           child: Row(
             children: [
               Expanded(child: Text(label, style: AppType.label)),
-              Icon(Icons.chevron_right_rounded, size: 22, color: ns.ink),
+              DoodleIcon(Icons.chevron_right_rounded, size: 22, color: ns.ink),
             ],
           ),
         ),

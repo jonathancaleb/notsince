@@ -15,11 +15,12 @@ import 'package:notsince/features/counter/presentation/counter_settings_screen.d
 import 'package:notsince/core/widgets/sticker_button.dart';
 import 'package:notsince/core/widgets/sticker_card.dart';
 import 'package:notsince/core/widgets/habit_plant.dart';
+import 'package:notsince/core/widgets/doodle_icon.dart';
 
 /// One counter, full screen.
 ///
-/// The whole page is built around a single number. Everything else â€” icon,
-/// name, progress, actions â€” is sized to stay clearly subordinate to it, so
+/// The whole page is built around a single number. Everything else — icon,
+/// name, progress, actions — is sized to stay clearly subordinate to it, so
 /// there is never any question about what the screen is for.
 class CounterPage extends ConsumerWidget {
   const CounterPage({super.key, required this.id});
@@ -51,7 +52,7 @@ class CounterPage extends ConsumerWidget {
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
                 _Heading(id: id, emoji: tracker.emoji, name: tracker.name),
-                const SizedBox(height: 10),
+                const SizedBox(height: 6),
                 Row(
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
@@ -60,12 +61,12 @@ class CounterPage extends ConsumerWidget {
                     Expanded(child: _BigCount(id: id)),
                   ],
                 ),
-                const SizedBox(height: 14),
+                const SizedBox(height: 12),
                 _Timeline(id: id, color: crayon),
               ],
             ),
           ),
-          const SizedBox(height: 18),
+          const SizedBox(height: 12),
           StickerButton(
             color: crayon,
             onPressed: () => ResetConfirmSheet.show(context, id),
@@ -120,7 +121,7 @@ class _Heading extends StatelessWidget {
             onPressed: () => Navigator.of(context).push(
               MaterialPageRoute(builder: (_) => CounterSettingsScreen(id: id)),
             ),
-            child: const Center(child: Icon(Icons.tune_rounded, size: 18)),
+            child: const Center(child: DoodleIcon(Icons.tune_rounded, size: 18)),
           ),
         ),
       ],
@@ -157,12 +158,12 @@ class _BigCount extends ConsumerWidget {
           ),
         ),
         Text(days == 1 ? 'day' : 'days', style: AppType.cardTitle),
-        const SizedBox(height: 10),
+        const SizedBox(height: 6),
         Text(
           secondaryLine(progress.elapsed),
           style: AppType.muted(ns),
         ),
-        const SizedBox(height: 8),
+        const SizedBox(height: 4),
         Text(
           habitEncouragement(progress.elapsed, hasHistory: hasHistory),
           textAlign: TextAlign.center,
@@ -217,8 +218,8 @@ class _Timeline extends ConsumerWidget {
 
     return Text(
       next == null
-          ? 'Fully grown Â· every milestone behind you'
-          : '${passed.length} of ${stops.length} Â· next ${milestoneLabel(next)}',
+          ? 'Fully grown · every milestone behind you'
+          : '${passed.length} of ${stops.length} · next ${milestoneLabel(next)}',
       textAlign: TextAlign.center,
       style: AppType.muted(ns),
     );

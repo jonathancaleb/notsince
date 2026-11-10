@@ -9,6 +9,7 @@ import 'package:notsince/core/widgets/soft_card.dart';
 
 import '../data/planner_store.dart';
 import '../domain/models.dart';
+import 'package:notsince/core/widgets/doodle_icon.dart';
 part 'widgets/planner_editors.dart';
 
 
@@ -39,7 +40,7 @@ class _NotesHubScreenState extends ConsumerState<NotesHubScreen> {
         actions: [
           IconButton(
             tooltip: 'Existing notes & reminders',
-            icon: const Icon(Icons.inventory_2_outlined),
+            icon: const DoodleIcon(Icons.inventory_2_outlined),
             onPressed: () => Navigator.push(
               context,
               MaterialPageRoute(builder: (_) => const NotesScreen()),
@@ -71,12 +72,12 @@ class _NotesHubScreenState extends ConsumerState<NotesHubScreen> {
           if (_section == 'Folders') ...[
             FilledButton.icon(
               onPressed: () => _newFolder(),
-              icon: const Icon(Icons.create_new_folder_outlined),
+              icon: const DoodleIcon(Icons.create_new_folder_outlined),
               label: const Text('New folder'),
             ),
             for (final folder in state.folders)
               ListTile(
-                leading: const Icon(Icons.folder_outlined),
+                leading: const DoodleIcon(Icons.folder_outlined),
                 title: Text(folder.name),
                 subtitle: folder.parentId == null
                     ? null
@@ -93,7 +94,7 @@ class _NotesHubScreenState extends ConsumerState<NotesHubScreen> {
           if (_section == 'Smart folders') ...[
             for (final type in SubjectType.values)
               ListTile(
-                leading: const Icon(Icons.auto_awesome_outlined),
+                leading: const DoodleIcon(Icons.auto_awesome_outlined),
                 title: Text('${type.name} notes'),
                 trailing: Text(
                   '${state.notes.where((n) => n.attachments.any((a) => a.type == type)).length}',
@@ -121,7 +122,7 @@ class _NotesHubScreenState extends ConsumerState<NotesHubScreen> {
                   builder: (_) => PlannerNoteEditor(folderId: _folder),
                 ),
               ),
-              icon: const Icon(Icons.add_rounded),
+              icon: const DoodleIcon(Icons.add_rounded),
               label: const Text('A fresh page'),
             ),
             const SizedBox(height: 24),

@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:notsince/core/theme/ns_colors.dart';
+import 'package:notsince/core/theme/sketch.dart';
 import 'package:notsince/core/theme/sticker.dart';
 
-/// A cut-out shape: ink outline, hard offset shadow, no blur.
+/// A card drawn on the page: pen outline, pencil-hatched shadow.
 class StickerCard extends StatelessWidget {
   const StickerCard({
     super.key,
@@ -23,22 +24,19 @@ class StickerCard extends StatelessWidget {
   final double radius;
   final Offset lift;
 
-  /// Thinner outline for small shapes, so a chip does not look as heavy as a
+  /// Thinner pen for small shapes, so a chip does not look as heavy as a
   /// full card.
   final bool thin;
 
   @override
   Widget build(BuildContext context) {
     final ns = context.ns;
-
-    return Container(
+    return SketchBox(
+      fill: color ?? ns.tint,
       padding: padding,
-      decoration: BoxDecoration(
-        color: color ?? ns.tint,
-        border: thin ? Sticker.thinOutline(ns.ink) : Sticker.outline(ns.ink),
-        borderRadius: BorderRadius.circular(radius),
-        boxShadow: Sticker.shadow(ns.ink, lift),
-      ),
+      radius: radius,
+      shadow: Sticker.hatchOffset(lift),
+      strokeWidth: thin ? Sketch.thinStroke : Sketch.stroke,
       child: child,
     );
   }

@@ -22,6 +22,7 @@ import 'package:notsince/features/counter/data/tracker_repository.dart';
 import 'package:notsince/features/notes/application/notes_controller.dart';
 import 'package:notsince/features/notes/data/note_repository.dart';
 import 'package:notsince/features/notifications/data/notification_service.dart';
+import 'package:notsince/features/onboarding/presentation/warm_onboarding_screen.dart';
 import 'package:notsince/features/shell/home_shell.dart';
 
 import '../support/fakes.dart';
@@ -100,6 +101,8 @@ void main() {
     String name, {
     HomeTab tab = HomeTab.home,
     ThemeMode mode = ThemeMode.light,
+    Widget home = const HomeShell(),
+    int nextTaps = 0,
   }) async {
     tester.view.physicalSize = s23AppArea;
     tester.view.devicePixelRatio = 1.0;
@@ -118,12 +121,16 @@ void main() {
             theme: _withEmoji(AppTheme.light),
             darkTheme: _withEmoji(AppTheme.dark),
             themeMode: mode,
-            home: const HomeShell(),
+            home: home,
           ),
         ),
       ),
     );
     await tester.pumpAndSettle();
+    for (var i = 0; i < nextTaps; i++) {
+      await tester.tap(find.text('Next'));
+      await tester.pumpAndSettle();
+    }
 
     final render =
         boundary.currentContext!.findRenderObject()! as RenderRepaintBoundary;
@@ -163,6 +170,26 @@ void main() {
     '09 dark garden',
     (t) =>
         shoot(t, '09-dark-garden', tab: HomeTab.garden, mode: ThemeMode.dark),
+  );
+  for (var page = 0; page < 4; page++) {
+    testWidgets(
+      '1$page onboarding ${page + 1}',
+      (t) => shoot(
+        t,
+        '1$page-onboarding-${page + 1}',
+        home: WarmOnboardingScreen(onDone: () {}),
+        nextTaps: page,
+      ),
+    );
+  }
+  testWidgets(
+    '14 dark onboarding',
+    (t) => shoot(
+      t,
+      '14-dark-onboarding',
+      home: WarmOnboardingScreen(onDone: () {}),
+      mode: ThemeMode.dark,
+    ),
   );
 }
 
@@ -276,6 +303,7 @@ void _seed(ProviderContainer container) {
 /// every screenshot comes out as grey blocks.
 Future<void> _loadBundledFonts() async {
   const families = <String, List<String>>{
+    'NanumPen': ['assets/fonts/NanumPenScript-400.ttf'],
     'Baloo2': [
       'assets/fonts/Baloo2-400.ttf',
       'assets/fonts/Baloo2-600.ttf',

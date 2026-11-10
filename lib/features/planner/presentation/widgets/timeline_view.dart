@@ -91,7 +91,7 @@ class _TimelineViewState extends ConsumerState<TimelineView> {
           ],
         ),
         TextButton.icon(
-          icon: const Icon(Icons.calendar_today_rounded),
+          icon: const DoodleIcon(Icons.calendar_today_rounded),
           label: Text(dayKey(_date)),
           onPressed: () async {
             final picked = await showDatePicker(

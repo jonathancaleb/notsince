@@ -12,6 +12,7 @@ import '../data/planner_store.dart';
 import '../domain/models.dart';
 import '../domain/time_aggregation.dart';
 import 'reports_screen.dart';
+import 'package:notsince/core/widgets/doodle_icon.dart';
 
 part 'widgets/planner_widgets.dart';
 part 'widgets/timeline_view.dart';
@@ -100,7 +101,7 @@ class _PlannerScreenState extends ConsumerState<PlannerScreen> {
           if (_section == 'Projects') ...[
             FilledButton.icon(
               onPressed: () => _addProject(context),
-              icon: const Icon(Icons.add_rounded),
+              icon: const DoodleIcon(Icons.add_rounded),
               label: const Text('New project'),
             ),
             const SizedBox(height: 24),
@@ -115,7 +116,7 @@ class _PlannerScreenState extends ConsumerState<PlannerScreen> {
                           project.color,
                           Theme.of(context).brightness,
                         ),
-                        child: const Icon(
+                        child: const DoodleIcon(
                           Icons.folder_rounded,
                           color: Colors.white,
                         ),

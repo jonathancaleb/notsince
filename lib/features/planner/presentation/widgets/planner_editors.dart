@@ -50,14 +50,14 @@ class _PlannerNoteEditorState extends ConsumerState<PlannerNoteEditor> {
         actions: [
           IconButton(
             tooltip: _preview ? 'Edit' : 'Preview markdown',
-            icon: Icon(
+            icon: DoodleIcon(
               _preview ? Icons.edit_outlined : Icons.visibility_outlined,
             ),
             onPressed: () => setState(() => _preview = !_preview),
           ),
           IconButton(
             tooltip: 'Delete note',
-            icon: const Icon(Icons.delete_outline),
+            icon: const DoodleIcon(Icons.delete_outline),
             onPressed: () async {
               final yes = await showDialog<bool>(
                 context: context,
@@ -122,7 +122,7 @@ class _PlannerNoteEditorState extends ConsumerState<PlannerNoteEditor> {
           ),
           TextButton.icon(
             onPressed: () => _attach(),
-            icon: const Icon(Icons.link_rounded),
+            icon: const DoodleIcon(Icons.link_rounded),
             label: const Text('Attach to a task, project, habit or day'),
           ),
           if (_preview)
@@ -155,7 +155,7 @@ class _PlannerNoteEditorState extends ConsumerState<PlannerNoteEditor> {
             children: [
               ListTile(
                 title: const Text('Choose a day'),
-                leading: const Icon(Icons.calendar_today_outlined),
+                leading: const DoodleIcon(Icons.calendar_today_outlined),
                 onTap: () async {
                   final now = ref.read(clockProvider).now();
                   final date = await showDatePicker(
@@ -272,7 +272,7 @@ class _JournalEditorState extends ConsumerState<JournalEditor> {
     crossAxisAlignment: CrossAxisAlignment.stretch,
     children: [
       TextButton.icon(
-        icon: const Icon(Icons.calendar_today_outlined),
+        icon: const DoodleIcon(Icons.calendar_today_outlined),
         label: Text(dayKey(_date)),
         onPressed: () async {
           await _save();

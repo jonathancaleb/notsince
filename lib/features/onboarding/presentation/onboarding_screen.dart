@@ -7,13 +7,14 @@ import 'package:notsince/core/theme/sticker.dart';
 import 'package:notsince/core/widgets/sticker_button.dart';
 import 'package:notsince/core/widgets/sticker_card.dart';
 import 'package:notsince/core/widgets/wordmark.dart';
+import 'package:notsince/core/widgets/doodle_icon.dart';
 
 /// Four pages, swipeable, then out of the way for good.
 ///
-/// The illustration on each page is built from the app's own shapes â€” the
+/// The illustration on each page is built from the app's own shapes — the
 part 'widgets/onboarding_pages.dart';
 
-/// sticker cards, dots and checkmarks you will actually meet â€” rather than
+/// sticker cards, dots and checkmarks you will actually meet — rather than
 /// stock artwork, so onboarding is a preview of the thing rather than an advert
 /// for it. No mascot, no character: the brief rules those out and the shapes
 /// carry it fine.

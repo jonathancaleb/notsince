@@ -3,6 +3,7 @@ import 'dart:math' as math;
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:notsince/core/theme/app_type.dart';
+import 'package:notsince/core/theme/sketch.dart';
 
 class HabitCircle extends StatefulWidget {
   const HabitCircle({
@@ -90,14 +91,25 @@ class _HabitCircleState extends State<HabitCircle>
                       child: Stack(
                         alignment: Alignment.center,
                         children: [
-                          SizedBox.expand(
-                            child: CircularProgressIndicator(
-                              value: widget.progress.clamp(0, 1),
-                              strokeWidth: 5,
-                              backgroundColor: widget.color.withValues(
-                                alpha: .12,
+                          // The ring draws itself in on first build, then
+                          // eases to new values like a pencil catching up.
+                          TweenAnimationBuilder<double>(
+                            tween: Tween(
+                              begin: 0,
+                              end: widget.progress.clamp(0.0, 1.0),
+                            ),
+                            duration: MediaQuery.disableAnimationsOf(context)
+                                ? Duration.zero
+                                : const Duration(milliseconds: 700),
+                            curve: Curves.easeOutCubic,
+                            builder: (context, value, _) => CustomPaint(
+                              size: const Size(88, 88),
+                              painter: SketchRingPainter(
+                                progress: value,
+                                color: widget.color,
+                                ink: Theme.of(context).colorScheme.onSurface,
+                                seed: widget.label.hashCode,
                               ),
-                              color: widget.color,
                             ),
                           ),
                           widget.child ??
@@ -131,6 +143,7 @@ class _HabitCircleState extends State<HabitCircle>
             Text(
               widget.label,
               maxLines: 2,
+              style: AppType.cardSmall,
               textAlign: TextAlign.center,
               overflow: TextOverflow.ellipsis,
             ),
@@ -141,24 +154,83 @@ class _HabitCircleState extends State<HabitCircle>
   );
 }
 
+/// A hand-drawn progress ring: a faint pencil circle for the track and a
+/// thick crayon stroke for the progress, both wobbling on a fixed seed.
+class SketchRingPainter extends CustomPainter {
+  const SketchRingPainter({
+    required this.progress,
+    required this.color,
+    required this.ink,
+    required this.seed,
+    this.width = 5,
+  });
+
+  final double progress;
+  final Color color;
+  final Color ink;
+  final int seed;
+  final double width;
+
+  @override
+  void paint(Canvas canvas, Size size) {
+    final c = size.center(Offset.zero);
+    final r = size.shortestSide / 2 - width / 2 - 1;
+    Sketch.pen(
+      canvas,
+      (s) => Sketch.circle(c, r, seed: s, wobble: .9, overshoot: 12),
+      seed: seed,
+      color: Sketch.inkShade(ink),
+      width: 1.3,
+    );
+    if (progress <= 0) return;
+    final arc = Sketch.circle(
+      c,
+      r,
+      seed: seed + 5,
+      wobble: 1.1,
+      sweep: math.pi * 2 * progress,
+    );
+    canvas.drawPath(
+      arc,
+      Paint()
+        ..color = color
+        ..style = PaintingStyle.stroke
+        ..strokeCap = StrokeCap.round
+        ..strokeWidth = width,
+    );
+  }
+
+  @override
+  bool shouldRepaint(SketchRingPainter old) =>
+      old.progress != progress ||
+      old.color != color ||
+      old.ink != ink ||
+      old.seed != seed ||
+      old.width != width;
+}
+
+/// Doodle sparkles: little four-point pen stars that fly out and fade.
 class _Sparkles extends CustomPainter {
   _Sparkles(this.t, this.color);
   final double t;
   final Color color;
   @override
   void paint(Canvas canvas, Size size) {
-    final paint = Paint()..color = color.withValues(alpha: 1 - t);
-    for (var i = 0; i < 10; i++) {
-      final angle = i * math.pi / 5;
-      final radius = 28 + t * 24;
-      canvas.drawCircle(
-        Offset(
-          size.width / 2 + math.cos(angle) * radius,
-          size.height / 2 + math.sin(angle) * radius,
-        ),
-        3 * (1 - t),
-        paint,
+    final paint = Paint()
+      ..color = color.withValues(alpha: 1 - t)
+      ..style = PaintingStyle.stroke
+      ..strokeWidth = 2
+      ..strokeCap = StrokeCap.round;
+    for (var i = 0; i < 6; i++) {
+      final angle = i * math.pi / 3 + .4;
+      final radius = 30 + t * 22;
+      final at = Offset(
+        size.width / 2 + math.cos(angle) * radius,
+        size.height / 2 + math.sin(angle) * radius,
       );
+      final arm = 5 * (1 - t * .6) * (i.isEven ? 1 : .7);
+      canvas.drawLine(at - Offset(arm, 0), at + Offset(arm, 0), paint);
+      canvas.drawLine(at - Offset(0, arm), at + Offset(0, arm), paint);
     }
   }
 

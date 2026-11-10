@@ -38,7 +38,7 @@ class _Header extends ConsumerWidget {
                   MaterialPageRoute(builder: (_) => const AppSettingsScreen()),
                 ),
                 child: const Center(
-                  child: Icon(Icons.settings_rounded, size: 20),
+                  child: DoodleIcon(Icons.settings_rounded, size: 20),
                 ),
               ),
             ),
@@ -55,7 +55,7 @@ class _Header extends ConsumerWidget {
           child: Row(
             mainAxisSize: MainAxisSize.min,
             children: [
-              Icon(Icons.wb_sunny_rounded, size: 15, color: ns.ink),
+              DoodleIcon(Icons.wb_sunny_rounded, size: 15, color: ns.ink),
               const SizedBox(width: 8),
               Text(_dateLabel(now), style: AppType.kicker),
             ],
@@ -172,7 +172,7 @@ class _CountHero extends ConsumerWidget {
                         Text(
                           next == null
                               ? 'Fully grown'
-                              : '$passedCount of ${tracker.sortedMilestones.length} Â· next ${milestoneLabel(next)}',
+                              : '$passedCount of ${tracker.sortedMilestones.length} · next ${milestoneLabel(next)}',
                           style: AppType.muted(ns),
                         ),
                       ],
@@ -207,7 +207,7 @@ class _NextAlarmCard extends ConsumerWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text('ðŸ””', style: AppType.glyph(20)),
+              Text('🔔', style: AppType.glyph(20)),
               const SizedBox(height: 8),
               Text(
                 next == null
@@ -252,7 +252,7 @@ class _NotesCard extends ConsumerWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(openTasks > 0 ? 'â˜‘' : 'ðŸ“', style: AppType.glyph(20)),
+              Text(openTasks > 0 ? '☑' : '📝', style: AppType.glyph(20)),
               const SizedBox(height: 8),
               Text('${notes.length}', style: AppType.stat),
               const SizedBox(height: 2),
@@ -281,7 +281,7 @@ String _ago(Duration d) {
   return 'just now';
 }
 
-/// Recent notes as a sideways strip of stickers. Reading only â€” tapping one
+/// Recent notes as a sideways strip of stickers. Reading only — tapping one
 /// opens it in the editor.
 class _NotesStrip extends ConsumerWidget {
   const _NotesStrip();

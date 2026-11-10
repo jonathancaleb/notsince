@@ -13,94 +13,222 @@ class PlantIllustration extends StatelessWidget {
   @override
   Widget build(BuildContext context) => Semantics(
     label: '${wilted ? 'Wilting ' : ''}${stage.name}',
+    // Pops in with a small overshoot and a one-off wobble, like a doodle
+    // being stuck onto the page. Nothing loops.
     child: TweenAnimationBuilder<double>(
-      tween: Tween(begin: .95, end: 1),
+      key: ValueKey(stage),
+      tween: Tween(begin: 0, end: 1),
       duration: MediaQuery.disableAnimationsOf(context)
           ? Duration.zero
-          : const Duration(milliseconds: 280),
+          : const Duration(milliseconds: 520),
       curve: Curves.easeOutBack,
-      builder: (context, value, child) =>
-          Transform.scale(scale: value, child: child),
+      builder: (context, value, child) => Transform.rotate(
+        angle: math.sin(value * math.pi * 2) * .035 * (1 - value),
+        alignment: Alignment.bottomCenter,
+        child: Transform.scale(
+          scale: .92 + .08 * value,
+          alignment: Alignment.bottomCenter,
+          child: child,
+        ),
+      ),
       child: RepaintBoundary(
         child: CustomPaint(
           size: const Size(112, 120),
-          painter: _PlantPainter(stage, wilted, color),
+          painter: _PlantPainter(stage, wilted, color, context.ns.ink),
         ),
       ),
     ),
   );
 }
 
+/// The garden plant as a pen doodle: every shape is a flat crayon fill with a
+/// wobbling ink outline over it, the pot is shaded with pencil hatching, and
+/// the seeds are fixed so a plant is always drawn the same way.
 class _PlantPainter extends CustomPainter {
-  _PlantPainter(this.stage, this.wilted, this.color);
+  _PlantPainter(this.stage, this.wilted, this.color, this.ink);
   final GrowthStage stage;
   final bool wilted;
   final Color color;
+  final Color ink;
+
+  static const _cx = 56.0;
+
   @override
   void paint(Canvas canvas, Size size) {
     canvas.scale(size.width / 112, size.height / 120);
-    final paint = Paint()..color = color.withValues(alpha: wilted ? .45 : 1);
-    const cx = 56.0;
-    canvas.drawRRect(
-      RRect.fromRectAndRadius(
-        Rect.fromLTWH(cx - 22, 90, 44, 24),
-        const Radius.circular(8),
-      ),
-      Paint()..color = AppColors.pot,
-    );
-    if (stage == GrowthStage.seed) {
-      canvas.drawOval(
-        Rect.fromCenter(center: Offset(cx, 88), width: 12, height: 8),
-        paint,
-      );
-      return;
-    }
-    final top = stage == GrowthStage.sprout
-        ? 68.0
-        : stage == GrowthStage.sapling
-        ? 40.0
-        : 24.0;
-    paint
+    final leaf = color.withValues(alpha: wilted ? .45 : 1);
+    final line = Sketch.inkLine(ink);
+    final pen = Paint()
+      ..color = line
       ..style = PaintingStyle.stroke
-      ..strokeWidth = 4
-      ..strokeCap = StrokeCap.round;
-    canvas.drawPath(
-      Path()
-        ..moveTo(cx, 94)
-        ..quadraticBezierTo(
-          cx + (wilted ? 14 : 0),
-          64,
-          cx + (wilted ? 12 : 0),
-          top,
-        ),
-      paint,
-    );
-    paint.style = PaintingStyle.fill;
-    for (var i = 0; i < (stage == GrowthStage.sprout ? 1 : 3); i++) {
-      final y = 80 - i * 15.0;
-      canvas.drawOval(Rect.fromLTWH(cx - 26, y - 10, 26, 12), paint);
-      canvas.drawOval(Rect.fromLTWH(cx, y - 16, 26, 12), paint);
-    }
-    if (stage == GrowthStage.bloom) {
-      for (var i = 0; i < 6; i++) {
-        final angle = i * math.pi / 3;
-        canvas.drawCircle(
-          Offset(cx + math.cos(angle) * 10, top + math.sin(angle) * 10),
-          8,
-          Paint()..color = color,
+      ..strokeWidth = 1.6
+      ..strokeCap = StrokeCap.round
+      ..strokeJoin = StrokeJoin.round;
+
+    _ground(canvas, pen);
+
+    final top = switch (stage) {
+      GrowthStage.seed => 88.0,
+      GrowthStage.sprout => 66.0,
+      GrowthStage.sapling => 40.0,
+      _ => 26.0,
+    };
+
+    if (stage == GrowthStage.seed) {
+      final seed = Path()
+        ..addOval(
+          Rect.fromCenter(center: const Offset(_cx, 87), width: 13, height: 9),
         );
-      }
-      canvas.drawCircle(
-        Offset(cx, top),
-        7,
-        Paint()..color = AppColors.bloom,
+      canvas.drawPath(seed, Paint()..color = leaf);
+      canvas.drawPath(seed, pen);
+      // A tiny sprouting tick, the promise of something.
+      canvas.drawPath(
+        Sketch.line(const Offset(_cx + 2, 82), const Offset(_cx + 5, 77),
+            seed: 3, wobble: .3),
+        pen,
       );
+    } else {
+      final lean = wilted ? 12.0 : 0.0;
+      final stem = Path()
+        ..moveTo(_cx, 92)
+        ..quadraticBezierTo(_cx + lean + 3, 64, _cx + lean, top);
+      canvas.drawPath(
+        stem,
+        Paint()
+          ..color = leaf
+          ..style = PaintingStyle.stroke
+          ..strokeWidth = 4
+          ..strokeCap = StrokeCap.round,
+      );
+      canvas.drawPath(stem, pen..strokeWidth = 1.2);
+      pen.strokeWidth = 1.6;
+
+      final pairs = stage == GrowthStage.sprout ? 1 : 3;
+      for (var i = 0; i < pairs; i++) {
+        final y = 82 - i * 16.0;
+        final x = _cx + lean * (1 - (y - top) / (92 - top));
+        final droop = wilted ? 6.0 : 0.0;
+        _leaf(canvas, Offset(x, y), -1, 22 - i * 2.0, droop, leaf, pen, i * 2);
+        _leaf(canvas, Offset(x, y - 6), 1, 22 - i * 2.0, droop, leaf, pen,
+            i * 2 + 1);
+      }
+
+      if (stage == GrowthStage.bloom) _bloom(canvas, Offset(_cx + lean, top), pen);
     }
+
+    _pot(canvas, pen);
+  }
+
+  void _ground(Canvas canvas, Paint pen) {
+    // A few grass ticks either side of the pot, so it sits on something.
+    final grass = Paint()
+      ..color = Sketch.inkShade(ink)
+      ..style = PaintingStyle.stroke
+      ..strokeWidth = 1.3
+      ..strokeCap = StrokeCap.round;
+    for (final (x, h, d) in const [
+      (22.0, 7.0, -2.0),
+      (27.0, 10.0, 1.0),
+      (86.0, 9.0, -1.0),
+      (91.0, 6.0, 2.0),
+    ]) {
+      canvas.drawLine(Offset(x, 114), Offset(x + d, 114 - h), grass);
+    }
+    canvas.drawPath(
+      Sketch.line(const Offset(14, 115), const Offset(98, 114),
+          seed: 21, wobble: .8),
+      grass,
+    );
+  }
+
+  void _pot(Canvas canvas, Paint pen) {
+    final body = Path()
+      ..moveTo(_cx - 20, 96)
+      ..lineTo(_cx + 20, 96)
+      ..lineTo(_cx + 16, 114)
+      ..quadraticBezierTo(_cx, 116, _cx - 16, 114)
+      ..close();
+    canvas.drawPath(body, Paint()..color = AppColors.pot);
+    // Shade the right-hand side, as if lit from the top left.
+    canvas.save();
+    canvas.clipRect(const Rect.fromLTWH(_cx + 6, 90, 30, 30));
+    Sketch.hatch(canvas, body, color: Sketch.inkShade(ink), gap: 3.5);
+    canvas.restore();
+    canvas.drawPath(body, pen);
+
+    final rim = Sketch.rrect(
+      const Rect.fromLTWH(_cx - 24, 89, 48, 9),
+      4,
+      seed: 77,
+      wobble: .5,
+    );
+    canvas.drawPath(rim, Paint()..color = AppColors.pot);
+    canvas.drawPath(
+      Sketch.rrect(const Rect.fromLTWH(_cx - 24, 89, 48, 9), 4,
+          seed: 77, wobble: .5, overshoot: 5),
+      pen,
+    );
+  }
+
+  void _leaf(
+    Canvas canvas,
+    Offset base,
+    double dir,
+    double length,
+    double droop,
+    Color fill,
+    Paint pen,
+    int seed,
+  ) {
+    final tip = base + Offset(dir * length, -length * .45 + droop);
+    final shape = Path()
+      ..moveTo(base.dx, base.dy)
+      ..quadraticBezierTo(
+        base.dx + dir * length * .35,
+        base.dy - length * .75 + droop,
+        tip.dx,
+        tip.dy,
+      )
+      ..quadraticBezierTo(
+        base.dx + dir * length * .75,
+        base.dy + length * .05 + droop,
+        base.dx,
+        base.dy,
+      )
+      ..close();
+    canvas.drawPath(shape, Paint()..color = fill);
+    canvas.drawPath(shape, pen);
+    // The vein, stopping short of the tip like a quick stroke would.
+    canvas.drawPath(
+      Sketch.line(base, Offset.lerp(base, tip, .7)!, seed: seed, wobble: .4),
+      Paint()
+        ..color = Sketch.inkLine(ink).withValues(alpha: .5)
+        ..style = PaintingStyle.stroke
+        ..strokeWidth = 1
+        ..strokeCap = StrokeCap.round,
+    );
+  }
+
+  void _bloom(Canvas canvas, Offset at, Paint pen) {
+    final petal = Paint()..color = color.withValues(alpha: wilted ? .45 : 1);
+    for (var i = 0; i < 6; i++) {
+      final angle = i * math.pi / 3;
+      final c = at + Offset(math.cos(angle) * 10, math.sin(angle) * 10);
+      final p = Sketch.circle(c, 7.5, seed: 40 + i, wobble: .5);
+      canvas.drawPath(p, petal);
+      canvas.drawPath(p, pen);
+    }
+    final centre = Sketch.circle(at, 6.5, seed: 50, wobble: .4);
+    canvas.drawPath(centre, Paint()..color = AppColors.bloom);
+    canvas.drawPath(centre, pen);
   }
 
   @override
   bool shouldRepaint(_PlantPainter old) =>
-      old.stage != stage || old.wilted != wilted || old.color != color;
+      old.stage != stage ||
+      old.wilted != wilted ||
+      old.color != color ||
+      old.ink != ink;
 }
 
 class PlantDetailScreen extends ConsumerWidget {

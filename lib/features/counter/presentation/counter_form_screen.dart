@@ -11,6 +11,7 @@ import 'package:notsince/core/time/duration_text.dart';
 import 'package:notsince/features/counter/domain/counter_icons.dart';
 import 'package:notsince/core/widgets/sticker_button.dart';
 import 'package:notsince/core/widgets/sticker_card.dart';
+import 'package:notsince/core/widgets/doodle_icon.dart';
 
 /// Making a counter: what it is, how it looks, when it started.
 ///
@@ -298,7 +299,7 @@ class StartTimeCard extends StatelessWidget {
                 style: AppType.bodyText.copyWith(color: ns.ink),
               ),
             ),
-            Icon(Icons.edit_calendar_rounded, size: 20, color: ns.ink),
+            DoodleIcon(Icons.edit_calendar_rounded, size: 20, color: ns.ink),
           ],
         ),
       ),

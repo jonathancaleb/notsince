@@ -13,6 +13,7 @@ import 'package:notsince/core/widgets/habit_circle.dart';
 import '../data/planner_store.dart';
 import '../domain/models.dart';
 import 'planner_screen.dart';
+import 'package:notsince/core/widgets/doodle_icon.dart';
 
 class TodayScreen extends ConsumerWidget {
   const TodayScreen({super.key});
@@ -27,7 +28,7 @@ class TodayScreen extends ConsumerWidget {
         actions: [
           IconButton(
             tooltip: 'Alarms',
-            icon: const Icon(Icons.alarm_rounded),
+            icon: const DoodleIcon(Icons.alarm_rounded),
             onPressed: () => Navigator.push(
               context,
               MaterialPageRoute(builder: (_) => const AlarmsScreen()),
@@ -35,7 +36,7 @@ class TodayScreen extends ConsumerWidget {
           ),
           IconButton(
             tooltip: 'Settings',
-            icon: const Icon(Icons.settings_rounded),
+            icon: const DoodleIcon(Icons.settings_rounded),
             onPressed: () => Navigator.push(
               context,
               MaterialPageRoute(builder: (_) => const AppSettingsScreen()),
@@ -46,7 +47,7 @@ class TodayScreen extends ConsumerWidget {
       body: Column(
         children: [
           const Padding(
-            padding: EdgeInsets.fromLTRB(24, 8, 24, 16),
+            padding: EdgeInsets.fromLTRB(24, 6, 24, 12),
             child: DayTimer(),
           ),
           Expanded(
@@ -69,7 +70,7 @@ class TodayScreen extends ConsumerWidget {
                     IconButton(
                       tooltip: 'Add a habit',
                       onPressed: () => CounterFormScreen.create(context),
-                      icon: const Icon(Icons.add_rounded),
+                      icon: const DoodleIcon(Icons.add_rounded),
                     ),
                   ],
                 ),

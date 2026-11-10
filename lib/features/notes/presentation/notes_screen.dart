@@ -8,12 +8,13 @@ import 'package:notsince/core/widgets/sticker_card.dart';
 import 'package:notsince/features/notes/application/notes_controller.dart';
 import 'package:notsince/features/notes/domain/note.dart';
 import 'package:notsince/features/notes/presentation/note_editor_screen.dart';
+import 'package:notsince/core/widgets/doodle_icon.dart';
 
 class NotesScreen extends ConsumerWidget {
   const NotesScreen({super.key});
 
   /// Asks which kind first, because a note and a task are different things to
-  /// sit down and write â€” not a setting you flip afterwards.
+  /// sit down and write — not a setting you flip afterwards.
   Future<void> _add(BuildContext context, WidgetRef ref) async {
     final isTask = await showModalBottomSheet<bool>(
       context: context,
@@ -108,7 +109,7 @@ class _KindSheet extends StatelessWidget {
               foreground: ns.ink,
               padding: const EdgeInsets.symmetric(vertical: 20),
               onPressed: () => Navigator.of(context).pop(false),
-              child: const Text('ðŸ“   Note'),
+              child: const Text('📝   Note'),
             ),
             const SizedBox(height: 12),
             StickerButton(
@@ -116,7 +117,7 @@ class _KindSheet extends StatelessWidget {
               foreground: ns.ink,
               padding: const EdgeInsets.symmetric(vertical: 20),
               onPressed: () => Navigator.of(context).pop(true),
-              child: const Text('â˜‘   Task'),
+              child: const Text('☑   Task'),
             ),
           ],
         ),
@@ -249,7 +250,7 @@ class StickerCheckbox extends StatelessWidget {
             borderRadius: BorderRadius.circular(8),
           ),
           child: value
-              ? Icon(Icons.check_rounded,
+              ? DoodleIcon(Icons.check_rounded,
                   size: size * 0.72, color: ns.paper)
               : null,
         ),

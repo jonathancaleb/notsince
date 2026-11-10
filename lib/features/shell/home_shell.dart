@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:notsince/core/theme/ns_colors.dart';
 import 'package:notsince/core/theme/app_type.dart';
+import 'package:notsince/core/theme/sketch.dart';
 import 'package:notsince/core/theme/sticker.dart';
 import 'package:notsince/features/alarms/application/alarms_controller.dart';
 import 'package:notsince/features/alarms/data/alarm_scheduler.dart';
@@ -16,6 +17,7 @@ import 'package:notsince/features/planner/presentation/reports_screen.dart';
 import 'package:notsince/features/garden/presentation/garden_screen.dart';
 import 'package:notsince/features/planner/data/planner_store.dart';
 import 'package:notsince/core/theme/app_colors.dart';
+import 'package:notsince/core/widgets/doodle_icon.dart';
 
 enum HomeTab { home, habit, alarms, notes, planner, garden, insights }
 
@@ -149,7 +151,13 @@ class _NavIsland extends ConsumerWidget {
       child: Padding(
         padding: const EdgeInsets.fromLTRB(20, 0, 20, 14),
         child: CustomPaint(
-          painter: _NavPainter(Theme.of(context).colorScheme.surface, ns.ink),
+          painter: SketchBoxPainter(
+            fill: Theme.of(context).colorScheme.surface,
+            ink: ns.ink,
+            radius: 28,
+            shadow: Sticker.hatchOffset(Sticker.lift),
+            seed: 1307,
+          ),
           child: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 12),
             child: Row(
@@ -231,51 +239,51 @@ class _NavItem extends StatelessWidget {
             // The selected tab is a filled circle that sits proud of the bar:
             // the same lift language as every other pressable sticker, so the
             // current tab looks like the one thing standing up.
-            AnimatedContainer(
+            // The selected tab is a sketched blob that sits proud of the bar
+            // and pops in with a small overshoot — the same lift language as
+            // every other pressable shape.
+            TweenAnimationBuilder<double>(
+              tween: Tween(end: isSelected ? 1 : 0),
               duration: MediaQuery.disableAnimationsOf(context)
                   ? Duration.zero
-                  : const Duration(milliseconds: 200),
-              curve: Curves.easeOut,
-              width: 44,
-              height: 36,
-              alignment: Alignment.center,
-              transform: Matrix4.translationValues(
-                0,
-                raised
-                    ? -8
-                    : isSelected
-                    ? -3
-                    : 0,
-                0,
-              ),
-              decoration: BoxDecoration(
-                color: isSelected ? accent : Colors.transparent,
-                border: Border.all(
-                  color: isSelected
-                      ? ns.ink.withValues(alpha: .08)
-                      : Colors.transparent,
-                  width: Sticker.thinBorder,
+                  : const Duration(milliseconds: 320),
+              curve: Curves.easeOutBack,
+              builder: (context, t, child) => Transform.translate(
+                offset: Offset(0, raised ? -8 : -3 * t),
+                child: CustomPaint(
+                  painter: t <= 0.01
+                      ? null
+                      : SketchBoxPainter(
+                          fill: accent.withValues(alpha: t.clamp(0, 1)),
+                          ink: ns.ink.withValues(
+                            alpha: ns.ink.a * t.clamp(0, 1),
+                          ),
+                          radius: 18,
+                          shadow: Offset(2.5, 3) * t.clamp(0, 1),
+                          strokeWidth: Sketch.thinStroke,
+                          seed: label.hashCode,
+                        ),
+                  child: Transform.scale(scale: .9 + .1 * t, child: child),
                 ),
-                borderRadius: BorderRadius.circular(18),
-                boxShadow: isSelected
-                    ? Sticker.shadow(ns.ink, const Offset(2, 3))
-                    : null,
               ),
-              child: Icon(
-                icon,
-                size: 20,
-                color: isSelected
-                    ? (accent.computeLuminance() > .18
-                          ? AppColors.darkBg
-                          : Colors.white)
-                    : ns.muted,
+              child: SizedBox(
+                width: 44,
+                height: 36,
+                child: DoodleIcon(
+                  icon,
+                  size: 20,
+                  color: isSelected
+                      ? (accent.computeLuminance() > .18
+                            ? AppColors.darkBg
+                            : Colors.white)
+                      : ns.muted,
+                ),
               ),
             ),
             const SizedBox(height: 3),
             Text(
               label,
               style: AppType.navCaption.copyWith(
-                fontWeight: isSelected ? FontWeight.w700 : FontWeight.w600,
                 color: isSelected ? ns.ink : ns.muted,
               ),
             ),
@@ -284,29 +292,4 @@ class _NavItem extends StatelessWidget {
       ),
     );
   }
-}
-
-class _NavPainter extends CustomPainter {
-  const _NavPainter(this.surface, this.ink);
-  final Color surface, ink;
-  @override
-  void paint(Canvas canvas, Size size) {
-    final path = Path()
-      ..addRRect(
-        RRect.fromRectAndRadius(Offset.zero & size, const Radius.circular(28)),
-      );
-    canvas.drawShadow(path, Colors.black.withValues(alpha: .16), 12, false);
-    canvas.drawPath(path, Paint()..color = surface);
-    canvas.drawPath(
-      path,
-      Paint()
-        ..color = ink.withValues(alpha: ink.computeLuminance() > .5 ? .02 : .1)
-        ..style = PaintingStyle.stroke
-        ..strokeWidth = .7,
-    );
-  }
-
-  @override
-  bool shouldRepaint(_NavPainter oldDelegate) =>
-      oldDelegate.surface != surface || oldDelegate.ink != ink;
 }

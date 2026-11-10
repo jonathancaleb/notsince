@@ -9,6 +9,7 @@ import 'package:notsince/features/counter/presentation/widgets/counter_page.dart
 import 'package:notsince/features/settings/presentation/app_settings_screen.dart';
 import 'package:notsince/core/widgets/sticker_button.dart';
 import 'package:notsince/core/widgets/wordmark.dart';
+import 'package:notsince/core/widgets/doodle_icon.dart';
 
 /// Home: one counter at a time, swipe sideways for the next.
 ///
@@ -62,7 +63,7 @@ class _CounterScreenState extends ConsumerState<CounterScreen> {
         title: const Wordmark(),
         actions: [
           IconButton(
-            icon: const Icon(Icons.settings_rounded),
+            icon: const DoodleIcon(Icons.settings_rounded),
             tooltip: 'Settings',
             onPressed: () => Navigator.of(context).push(
               MaterialPageRoute(builder: (_) => const AppSettingsScreen()),

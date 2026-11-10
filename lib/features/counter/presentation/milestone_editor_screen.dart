@@ -8,6 +8,7 @@ import 'package:notsince/core/theme/sticker.dart';
 import 'package:notsince/features/counter/domain/milestones.dart';
 import 'package:notsince/core/widgets/sticker_button.dart';
 import 'package:notsince/core/widgets/sticker_card.dart';
+import 'package:notsince/core/widgets/doodle_icon.dart';
 
 /// Thresholds are just durations, so editing them is adding to and removing
 /// from a list. Removing a milestone is not destructive: nothing is scored
@@ -53,7 +54,7 @@ class MilestoneEditorScreen extends ConsumerWidget {
                     ),
                   ),
                   IconButton(
-                    icon: const Icon(Icons.close_rounded, size: 20),
+                    icon: const DoodleIcon(Icons.close_rounded, size: 20),
                     color: ns.ink,
                     tooltip: 'Remove ${milestoneLabel(milestone)}',
                     onPressed: () =>

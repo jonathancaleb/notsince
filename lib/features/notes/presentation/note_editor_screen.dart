@@ -8,11 +8,12 @@ import 'package:notsince/core/widgets/sticker_card.dart';
 import 'package:notsince/features/notes/application/notes_controller.dart';
 import 'package:notsince/core/time/duration_text.dart';
 import 'package:notsince/features/notes/presentation/notes_screen.dart';
+import 'package:notsince/core/widgets/doodle_icon.dart';
 
 /// Writing happens on an island.
 ///
 /// The page is the note's colour, and the text sits on its own outlined card
-/// floating on top of it â€” so the thing you are writing is visibly a separate
+/// floating on top of it — so the thing you are writing is visibly a separate
 /// object from the app around it, rather than text loose on a background. The
 /// controls live outside the island, which keeps the writing surface clear.
 class NoteEditorScreen extends ConsumerStatefulWidget {
@@ -123,7 +124,7 @@ class _NoteEditorScreenState extends ConsumerState<NoteEditorScreen> {
           title: Text(_isTask ? 'Task' : 'Note', style: AppType.screenTitle),
           actions: [
             IconButton(
-              icon: const Icon(Icons.delete_outline_rounded),
+              icon: const DoodleIcon(Icons.delete_outline_rounded),
               tooltip: 'Delete',
               onPressed: _delete,
             ),
@@ -270,7 +271,7 @@ class _NoteEditorScreenState extends ConsumerState<NoteEditorScreen> {
   }
 }
 
-/// When a task is due. Absent until you set one â€” most tasks never need a time,
+/// When a task is due. Absent until you set one — most tasks never need a time,
 /// and an empty date field on every task would be noise.
 class _DueChip extends StatelessWidget {
   const _DueChip({
@@ -306,7 +307,7 @@ class _DueChip extends StatelessWidget {
           child: Row(
             mainAxisSize: MainAxisSize.min,
             children: [
-              Icon(
+              DoodleIcon(
                 Icons.schedule_rounded,
                 size: 17,
                 color: overdue ? ns.paper : ns.ink,
@@ -351,7 +352,7 @@ class _KindToggle extends StatelessWidget {
           child: Row(
             mainAxisSize: MainAxisSize.min,
             children: [
-              Icon(
+              DoodleIcon(
                 isTask
                     ? Icons.check_box_rounded
                     : Icons.check_box_outline_blank_rounded,

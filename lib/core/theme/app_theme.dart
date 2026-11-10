@@ -1,7 +1,10 @@
+import 'package:flutter/cupertino.dart' show CupertinoPageTransitionsBuilder;
 import 'package:flutter/material.dart';
 import 'package:notsince/core/theme/app_type.dart';
 import 'package:notsince/core/theme/ns_colors.dart';
+import 'package:notsince/core/theme/sketch.dart';
 import 'package:notsince/core/theme/sticker.dart';
+import 'package:notsince/core/widgets/doodle_icon.dart';
 
 import 'app_colors.dart';
 
@@ -72,14 +75,45 @@ ThemeData _theme(NsColors ns, Brightness brightness) {
 
   // Text inherits its colour from here, so styles in AppType stay colourless
   // and work in both themes without every call site restating it.
-  final text = base.textTheme.apply(bodyColor: ns.ink, displayColor: ns.ink);
+  // Material's own type scale is sized for a text face. The roles stock
+  // components fall through to (list tiles, text fields, menus, snack bars)
+  // are mapped onto the pen styles so nothing reads a size too small.
+  final text = base.textTheme
+      .copyWith(
+        displaySmall: AppType.displayLarge,
+        headlineSmall: AppType.sheetTitle,
+        titleLarge: AppType.cardTitle,
+        titleMedium: AppType.lead,
+        titleSmall: AppType.plain,
+        bodyLarge: AppType.paragraph,
+        bodyMedium: AppType.paragraph,
+        bodySmall: AppType.caption,
+        labelLarge: AppType.button,
+        labelMedium: AppType.caption,
+        labelSmall: AppType.caption,
+      )
+      .apply(bodyColor: ns.ink, displayColor: ns.ink);
 
   return base.copyWith(
     extensions: [ns],
     textTheme: text,
-    scaffoldBackgroundColor: ns.paper,
+    // Scaffolds are see-through: every route is put on the dotted sketchbook
+    // page by [PaperPageTransitionsBuilder], so the page texture is painted
+    // once per route instead of being restated by every screen.
+    scaffoldBackgroundColor: Colors.transparent,
+    canvasColor: ns.paper,
+    pageTransitionsTheme: PageTransitionsTheme(
+      builders: {
+        for (final platform in TargetPlatform.values)
+          platform: PaperPageTransitionsBuilder(
+            platform == TargetPlatform.iOS || platform == TargetPlatform.macOS
+                ? const CupertinoPageTransitionsBuilder()
+                : const FadeForwardsPageTransitionsBuilder(),
+          ),
+      },
+    ),
     appBarTheme: AppBarTheme(
-      backgroundColor: ns.paper,
+      backgroundColor: Colors.transparent,
       surfaceTintColor: Colors.transparent,
       foregroundColor: ns.ink,
       elevation: 0,
@@ -102,9 +136,8 @@ ThemeData _theme(NsColors ns, Brightness brightness) {
       backgroundColor: ns.paper,
       surfaceTintColor: Colors.transparent,
       elevation: 0,
-      shape: RoundedRectangleBorder(
-        side: BorderSide(color: ns.ink, width: Sticker.border),
-        borderRadius: BorderRadius.circular(Sticker.radius),
+      shape: SketchBorder(
+        side: BorderSide(color: Sketch.inkLine(ns.ink), width: Sketch.stroke),
       ),
       titleTextStyle: AppType.cardTitle.copyWith(color: ns.ink),
       contentTextStyle: AppType.bodyText.copyWith(color: ns.ink),
@@ -114,9 +147,9 @@ ThemeData _theme(NsColors ns, Brightness brightness) {
       surfaceTintColor: Colors.transparent,
       elevation: 0,
       showDragHandle: true,
-      dragHandleColor: ns.ink,
+      dragHandleColor: Sketch.inkLine(ns.ink),
       shape: RoundedRectangleBorder(
-        side: BorderSide(color: ns.ink, width: Sticker.border),
+        side: BorderSide(color: Sketch.inkLine(ns.ink), width: Sticker.border),
         borderRadius: const BorderRadius.vertical(
           top: Radius.circular(Sticker.radius),
         ),
@@ -129,6 +162,12 @@ ThemeData _theme(NsColors ns, Brightness brightness) {
       ),
     ),
     iconTheme: IconThemeData(color: ns.ink),
+    // App bars build their own back and close glyphs; route them through the
+    // doodle set so the one icon on every pushed screen is hand-drawn too.
+    actionIconTheme: ActionIconThemeData(
+      backButtonIconBuilder: (_) => const DoodleIcon(Icons.arrow_back_rounded),
+      closeButtonIconBuilder: (_) => const DoodleIcon(Icons.close_rounded),
+    ),
     textSelectionTheme: TextSelectionThemeData(
       cursorColor: ns.primary,
       selectionColor: ns.primary.withValues(alpha: 0.25),
@@ -139,13 +178,17 @@ ThemeData _theme(NsColors ns, Brightness brightness) {
       contentTextStyle: AppType.bodyText.copyWith(color: ns.paper),
       behavior: SnackBarBehavior.floating,
     ),
-    dividerTheme: DividerThemeData(color: ns.ink, thickness: 0.7, space: 2),
+    dividerTheme: DividerThemeData(
+      color: Sketch.inkShade(ns.ink),
+      thickness: 1.2,
+      space: 2,
+    ),
   );
 }
 
 OutlineInputBorder _fieldBorder(Color ink, double width) => OutlineInputBorder(
   borderRadius: BorderRadius.circular(Sticker.smallRadius),
-  borderSide: BorderSide(color: ink, width: width),
+  borderSide: BorderSide(color: Sketch.inkLine(ink), width: width),
 );
 
 /// The finished themes the app actually runs with: the sticker base plus the
@@ -174,6 +217,7 @@ abstract final class AppTheme {
           ? AppColors.darkSurface
           : AppColors.surface,
     );
+    final penLine = Sketch.inkLine(scheme.onSurface);
     return base.copyWith(
       colorScheme: scheme,
       extensions: [
@@ -195,12 +239,32 @@ abstract final class AppTheme {
       filledButtonTheme: FilledButtonThemeData(
         style: FilledButton.styleFrom(
           minimumSize: const Size(48, 52),
-          shape: const StadiumBorder(),
+          elevation: 0,
+          textStyle: AppType.buttonLarge,
+          foregroundColor: scheme.onPrimary,
+          shape: SketchBorder(side: BorderSide(color: penLine)),
+          side: BorderSide(color: penLine, width: Sketch.stroke),
+        ),
+      ),
+      outlinedButtonTheme: OutlinedButtonThemeData(
+        style: OutlinedButton.styleFrom(
+          minimumSize: const Size(48, 48),
+          textStyle: AppType.button,
+          foregroundColor: scheme.onSurface,
+          shape: SketchBorder(side: BorderSide(color: penLine)),
+          side: BorderSide(color: penLine, width: Sketch.stroke),
         ),
       ),
       chipTheme: base.chipTheme.copyWith(
-        shape: const StadiumBorder(),
-        side: BorderSide(color: scheme.outlineVariant),
+        shape: SketchBorder(
+          radius: 18,
+          side: BorderSide(color: penLine, width: Sketch.thinStroke),
+        ),
+        side: BorderSide(color: penLine, width: Sketch.thinStroke),
+        labelStyle: AppType.label.copyWith(color: scheme.onSurface),
+        checkmarkColor: scheme.onSurface,
+        selectedColor: scheme.primaryContainer,
+        backgroundColor: base.extension<NsColors>()!.paper,
       ),
     );
   }

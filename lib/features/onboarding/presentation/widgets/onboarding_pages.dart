@@ -21,32 +21,38 @@ class _PageView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 28),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          // The illustration takes whatever room the text leaves and scales to
-          // fit it. A fixed height only works on the phone it was measured on:
-          // the same card needs 151dp of a 142dp box on a 360x760 screen, and
-          // less again on anything shorter.
-          Expanded(
-            child: Center(
-              child: FittedBox(
-                fit: BoxFit.contain,
-                child: _Illustration(art: page.art, color: page.color),
-              ),
+    // The illustration takes whatever room the text leaves and scales to fit
+    // it. When even the text alone does not fit (a short screen, large text,
+    // a wordy headline in the pen face) the page scrolls instead of clipping.
+    return LayoutBuilder(
+      builder: (context, constraints) => SingleChildScrollView(
+        padding: const EdgeInsets.symmetric(horizontal: 28),
+        child: ConstrainedBox(
+          constraints: BoxConstraints(minHeight: constraints.maxHeight),
+          child: IntrinsicHeight(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Expanded(
+                  child: Center(
+                    child: FittedBox(
+                      fit: BoxFit.contain,
+                      child: _Illustration(art: page.art, color: page.color),
+                    ),
+                  ),
+                ),
+                const SizedBox(height: 28),
+                Text(
+                  page.headline,
+                  style: AppType.displayLarge.copyWith(height: 1.1),
+                ),
+                const SizedBox(height: 14),
+                Text(page.body, style: AppType.bodyText),
+                const SizedBox(height: 24),
+              ],
             ),
           ),
-          const SizedBox(height: 28),
-          Text(
-            page.headline,
-            style: AppType.counter(30).copyWith(height: 1.15),
-          ),
-          const SizedBox(height: 14),
-          Text(page.body, style: AppType.bodyText),
-          const SizedBox(height: 24),
-        ],
+        ),
       ),
     );
   }
@@ -75,7 +81,7 @@ class _Illustration extends StatelessWidget {
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  Text('ðŸº', style: AppType.glyph(26)),
+                  Text('🍺', style: AppType.glyph(26)),
                   const SizedBox(height: 4),
                   Text('12', style: AppType.counter(84)),
                   Text('days', style: AppType.subtitle),
@@ -112,7 +118,7 @@ class _Illustration extends StatelessWidget {
                 ),
               ),
               const SizedBox(width: 6),
-              Icon(Icons.arrow_forward_rounded,
+              DoodleIcon(Icons.arrow_forward_rounded,
                   size: 26, color: ns.ink),
               const SizedBox(width: 6),
               Transform.rotate(
@@ -149,7 +155,7 @@ class _Illustration extends StatelessWidget {
                   child: Row(
                     mainAxisSize: MainAxisSize.min,
                     children: [
-                      Text('ðŸ””', style: AppType.glyph(22)),
+                      Text('🔔', style: AppType.glyph(22)),
                       const SizedBox(width: 12),
                       Text('06:30', style: AppType.counter(34)),
                     ],
@@ -175,7 +181,7 @@ class _Illustration extends StatelessWidget {
                           border: Sticker.thinOutline(ns.ink),
                           borderRadius: BorderRadius.circular(7),
                         ),
-                        child: Icon(Icons.check_rounded,
+                        child: DoodleIcon(Icons.check_rounded,
                             size: 15, color: ns.paper),
                       ),
                       const SizedBox(width: 12),
@@ -208,7 +214,7 @@ class _Illustration extends StatelessWidget {
                       border: Sticker.outline(ns.ink),
                       shape: BoxShape.circle,
                     ),
-                    child: Icon(Icons.lock_rounded,
+                    child: DoodleIcon(Icons.lock_rounded,
                         size: 30, color: ns.ink),
                   ),
                   const SizedBox(height: 14),

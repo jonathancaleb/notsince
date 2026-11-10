@@ -16,7 +16,7 @@ class TimerButton extends ConsumerWidget {
     final running = active?.subjectType == type && active?.subjectId == id;
     return IconButton(
       tooltip: running ? 'Pause timer' : 'Start timer',
-      icon: Icon(running ? Icons.pause_rounded : Icons.play_arrow_rounded),
+      icon: DoodleIcon(running ? Icons.pause_rounded : Icons.play_arrow_rounded),
       onPressed: () => ref
           .read(plannerProvider.notifier)
           .toggleTimer(type, id, projectId: projectId),
@@ -74,9 +74,16 @@ class DayTimer extends ConsumerWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 const Text('Make room for today'),
-                Text(
-                  elapsedLabel(daySeconds),
-                  style: Theme.of(context).textTheme.displaySmall,
+                // A running clock must stay on one line: at large text sizes
+                // it shrinks to fit rather than wrapping mid-number.
+                FittedBox(
+                  fit: BoxFit.scaleDown,
+                  alignment: AlignmentDirectional.centerStart,
+                  child: Text(
+                    elapsedLabel(daySeconds),
+                    maxLines: 1,
+                    style: Theme.of(context).textTheme.displaySmall,
+                  ),
                 ),
                 Text(
                   '${elapsedLabel(report.totalSeconds)} tracked across your day',
@@ -127,7 +134,7 @@ class ExistingTasks extends ConsumerWidget {
                 children: [
                   IconButton(
                     tooltip: 'Complete ${task.displayTitle}',
-                    icon: const Icon(Icons.radio_button_unchecked),
+                    icon: const DoodleIcon(Icons.radio_button_unchecked),
                     onPressed: () =>
                         ref.read(notesProvider.notifier).setDone(task.id, true),
                   ),
@@ -176,7 +183,7 @@ class _TaskQuickAddState extends ConsumerState<TaskQuickAdd> {
       suffixIcon: IconButton(
         tooltip: 'Add task',
         onPressed: _saving ? null : _add,
-        icon: const Icon(Icons.add_rounded),
+        icon: const DoodleIcon(Icons.add_rounded),
       ),
     ),
   );
@@ -305,7 +312,7 @@ class TaskList extends ConsumerWidget {
               background: Container(
                 alignment: Alignment.centerLeft,
                 padding: const EdgeInsets.all(24),
-                child: const Icon(Icons.check_rounded),
+                child: const DoodleIcon(Icons.check_rounded),
               ),
               confirmDismiss: (_) async {
                 await completeWithFeedback(
@@ -329,7 +336,7 @@ class TaskList extends ConsumerWidget {
                     children: [
                       IconButton(
                         tooltip: 'Complete ${task.title}',
-                        icon: const Icon(Icons.radio_button_unchecked_rounded),
+                        icon: const DoodleIcon(Icons.radio_button_unchecked_rounded),
                         onPressed: () => completeWithFeedback(
                           ref.read(plannerProvider.notifier),
                           task,
@@ -364,7 +371,7 @@ class TaskList extends ConsumerWidget {
                       IconButton(
                         tooltip: 'Task options',
                         onPressed: () => _edit(context, ref, task),
-                        icon: const Icon(Icons.more_horiz_rounded),
+                        icon: const DoodleIcon(Icons.more_horiz_rounded),
                       ),
                     ],
                   ),

@@ -21,10 +21,11 @@ import 'package:notsince/features/notes/application/notes_controller.dart';
 import 'package:notsince/features/notes/presentation/note_editor_screen.dart';
 import 'package:notsince/features/settings/presentation/app_settings_screen.dart';
 import 'package:notsince/features/shell/home_shell.dart';
+import 'package:notsince/core/widgets/doodle_icon.dart';
 
 /// Home. One screen that answers "how am I doing" for all three domains.
 ///
-/// It owns no state â€” everything here is a derived provider from counter,
+/// It owns no state — everything here is a derived provider from counter,
 /// alarms or notes. The count keeps the whole top of the screen because it is
 /// still what the app is for; the alarm and notes are glanceable summaries that
 part 'widgets/dashboard_cards.dart';
@@ -96,5 +97,5 @@ String _dateLabel(DateTime dt) {
 ///
 /// The date used to be grey small print next to a grey gear. Both are now
 /// objects: the date is a tinted sticker chip that says what day it is in
-/// words, and settings is a proper outlined button rather than a bare icon â€”
+/// words, and settings is a proper outlined button rather than a bare icon —
 /// so the header has the same physical language as everything under it.

@@ -11,6 +11,7 @@ import 'package:notsince/features/counter/presentation/counter_form_screen.dart'
 import 'package:notsince/features/counter/presentation/milestone_editor_screen.dart';
 import 'package:notsince/core/widgets/sticker_button.dart';
 import 'package:notsince/core/widgets/sticker_card.dart';
+import 'package:notsince/core/widgets/doodle_icon.dart';
 
 /// Everything that belongs to one counter. App-wide preferences live in
 /// [AppSettingsScreen] instead, so neither screen becomes a junk drawer.
@@ -267,7 +268,7 @@ class SettingRow extends StatelessWidget {
               ),
             ),
             const SizedBox(width: 12),
-            Icon(Icons.chevron_right_rounded,
+            DoodleIcon(Icons.chevron_right_rounded,
                 size: 22, color: ns.ink),
           ],
         ),

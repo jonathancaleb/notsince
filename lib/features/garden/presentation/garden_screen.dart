@@ -13,11 +13,14 @@ import 'package:notsince/features/planner/data/planner_store.dart';
 import 'package:notsince/features/planner/domain/models.dart';
 import 'package:notsince/features/planner/presentation/planner_screen.dart';
 import 'package:notsince/core/theme/app_colors.dart';
+import 'package:notsince/core/theme/ns_colors.dart';
+import 'package:notsince/core/theme/sketch.dart';
 import 'package:notsince/core/theme/app_spacing.dart';
 import 'package:notsince/core/widgets/habit_circle.dart';
 import 'package:notsince/core/widgets/soft_card.dart';
 
 import '../growth_engine.dart';
+import 'package:notsince/core/widgets/doodle_icon.dart';
 
 part 'widgets/plant_detail.dart';
 
@@ -81,7 +84,7 @@ class GardenScreen extends ConsumerWidget {
         actions: [
           IconButton(
             tooltip: 'Plant a habit',
-            icon: const Icon(Icons.add_rounded),
+            icon: const DoodleIcon(Icons.add_rounded),
             onPressed: () => CounterFormScreen.create(context),
           ),
         ],
@@ -156,6 +159,7 @@ class GardenScreen extends ConsumerWidget {
                                         growth.stage,
                                         growth.wilted,
                                         habitColor(context, state, tracker),
+                                        context.ns.ink,
                                       ),
                                     ),
                                   ),

@@ -2,7 +2,7 @@
 <resources>
     <!-- Mirrors AppPalette. Kept in sync by hand; these are the only colours
          Android needs before Flutter has drawn anything. -->
-    <color name="ns_paper">#FAF8F2</color>
+    <color name="ns_paper">#171513</color>
     <color name="ns_tint">#EAF3DE</color>
     <color name="ns_ink">#173404</color>
     <color name="ns_primary">#3B6D11</color>
